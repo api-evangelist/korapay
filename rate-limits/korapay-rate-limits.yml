@@ -1,0 +1,66 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Kora
+providerId: korapay
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Payments
+- Payment Gateway
+- Africa
+- Nigeria
+- Rate Limiting
+- Quotas
+description: >-
+  Kora does not publish fixed numeric API rate limits in its developer
+  documentation. As a payments processor, practical throughput is governed more
+  by transaction-level controls than by a per-minute request cap: bulk payouts
+  are bounded by a per-batch payout count (minimum 2), payouts require a
+  sufficient available balance, and certain products (card payments, mobile
+  money) must be enabled on the account. Payout security controls such as IP
+  whitelisting can also gate requests. Clients should treat the API as
+  rate-limited in principle, handle HTTP 429 responses with backoff, and rely on
+  idempotent references to avoid duplicate charges or payouts on retries.
+notes: >-
+  No per-account or per-endpoint numeric request limits are documented as of the
+  review date. Confirm any applicable limits, bulk batch maximums, and
+  transaction min/max amounts with Kora during reconciliation.
+sources:
+- https://developers.korapay.com/docs/getting-started
+- https://developers.korapay.com/docs/bulk-payouts-via-api
+- https://developers.korapay.com/docs/how-do-i-whitelist-payout-ip-addresses-on-the-merchant-dashboard
+responseCodes:
+  throttled: 429
+limits:
+- name: API Requests
+  scope: account
+  metric: requests
+  limit: not published
+  notes: No fixed numeric request-rate limit is documented for the merchant API.
+- name: Bulk Payout Batch Size
+  scope: request
+  metric: payouts
+  limit: minimum 2 per batch; maximum not published
+  notes: A bulk payout must contain at least 2 payouts; the upper bound is not documented.
+- name: Payout Balance
+  scope: account
+  metric: balance
+  limit: bounded by available balance
+  notes: Payouts (single and bulk) are disbursed from your positive available balance and fail without sufficient funds.
+- name: Transaction Amount
+  scope: transaction
+  metric: amount
+  limit: per product / market
+  notes: Per-product minimum and maximum transaction amounts apply and vary by market and channel; verify with Kora.
+policies:
+- name: Backoff Strategy
+  description: On HTTP 429 or transient errors, retry with exponential backoff and jitter.
+- name: Idempotency via References
+  description: Use unique merchant references (and batch_reference for bulk) so retries do not create duplicate charges or payouts.
+- name: Payout IP Whitelisting
+  description: Payout requests can be restricted to whitelisted IP addresses configured on the merchant dashboard.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

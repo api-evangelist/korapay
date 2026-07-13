@@ -1,0 +1,1259 @@
+openapi: 3.0.3
+info:
+  title: Kora (Korapay) Merchant API
+  description: >-
+    The Kora merchant REST API for pan-African payments. It supports pay-ins
+    (card, bank transfer, mobile money, pay-with-bank), payouts (single, bulk,
+    remittance), NGN and USD virtual bank accounts, balances, refunds,
+    multi-currency conversion, and payout utilities (bank / mobile-money lookups
+    and account resolution). All requests are authenticated with API keys - a
+    public key for client-side charge initiation and a secret key (Bearer) for
+    server-side and financial operations - and each account has separate Test
+    and Live mode keys. Card charge payloads must be AES-256 encrypted with your
+    encryption key. Webhook notifications carry an `x-korapay-signature` header
+    that is an HMAC SHA-256 of the response `data` object signed with your secret
+    key.
+
+    This document is a representative, grounded subset of the public Kora API.
+    Request and response schemas are simplified; consult the Kora developer
+    documentation for the authoritative field-level contract. Endpoints are
+    confirmed against Kora's published documentation except where a description
+    notes an inferred path.
+  version: '1.0'
+  contact:
+    name: Kora Developer Support
+    url: https://developers.korapay.com
+    email: support@korapay.com
+servers:
+  - url: https://api.korapay.com/merchant/api/v1
+    description: Kora merchant API (Test and Live selected by the API key used)
+security:
+  - secretKeyAuth: []
+tags:
+  - name: Charges
+    description: Pay-ins - card, bank transfer, mobile money, and pay-with-bank.
+  - name: Payouts
+    description: Disbursements to bank accounts and mobile money wallets.
+  - name: Virtual Bank Accounts
+    description: Dedicated NGN and USD virtual bank accounts.
+  - name: Balances
+    description: Real-time available and pending balances per currency.
+  - name: Refunds
+    description: Refunds for completed pay-in transactions.
+  - name: Currency Conversion
+    description: Exchange rates and multi-currency conversions.
+  - name: Misc
+    description: Bank / mobile-money lookups, account resolution, and payout utilities.
+paths:
+  /charges/initialize:
+    post:
+      operationId: initializeCharge
+      tags:
+        - Charges
+      summary: Initialize a charge
+      description: >-
+        Initializes a checkout charge and returns a hosted checkout URL /
+        reference. Typically called with your public key from the client side.
+      security:
+        - publicKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitializeChargeInput'
+      responses:
+        '200':
+          description: The initialized charge.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charges/card:
+    post:
+      operationId: chargeCard
+      tags:
+        - Charges
+      summary: Charge a card
+      description: >-
+        Charges a card. The card and payment details must be AES-256 encrypted
+        with your encryption key and submitted as a single `charge_data` string.
+        The response `status` (success, processing, or failed) and, when
+        processing, the returned `auth_model` determine the next authorization
+        step (PIN, OTP, AVS/address, or phone). Card payments require the
+        feature to be enabled on your account and PCI DSS Level 1 certification.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptedChargeInput'
+      responses:
+        '200':
+          description: The card charge result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charges/card/authorize:
+    post:
+      operationId: authorizeCardCharge
+      tags:
+        - Charges
+      summary: Authorize a card charge
+      description: >-
+        Completes a processing card charge by supplying the authorization the
+        card requires (PIN, OTP, AVS/address, or phone), together with the
+        transaction reference. NOTE - the exact path of this authorization
+        endpoint is inferred by convention; Kora's documentation links to a
+        Postman entry rather than printing the literal path. Verify before use.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardAuthorizationInput'
+      responses:
+        '200':
+          description: The authorization result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charges/mobile-money:
+    post:
+      operationId: chargeMobileMoney
+      tags:
+        - Charges
+      summary: Charge a mobile money wallet
+      description: >-
+        Charges a customer's mobile money wallet. Available in Kenya (KES),
+        Ghana (GHS), Cameroon (XAF), Cote d'Ivoire (XOF), Egypt (EGP), and
+        Tanzania (TZS). The response `auth_model` (OTP, STK_PROMPT, or REDIRECT)
+        indicates the action required to complete the transaction.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MobileMoneyChargeInput'
+      responses:
+        '200':
+          description: The mobile money charge result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charges/mobile-money/authorize:
+    post:
+      operationId: authorizeMobileMoneyCharge
+      tags:
+        - Charges
+      summary: Authorize a mobile money charge
+      description: >-
+        Authorizes a mobile money charge whose `auth_model` was OTP by
+        submitting the OTP collected from the customer along with the
+        transaction reference. The response indicates the next required action.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MobileMoneyAuthorizationInput'
+      responses:
+        '200':
+          description: The authorization result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charge/pay-with-bank:
+    post:
+      operationId: chargePayWithBank
+      tags:
+        - Charges
+      summary: Charge with Pay with Bank
+      description: >-
+        Initiates a Pay with Bank charge and returns a redirect URL used to
+        complete the payment. Supports ZAR Instant EFT and NGN direct-debit
+        style flows (currently Opay and Palmpay for NGN).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayWithBankInput'
+      responses:
+        '200':
+          description: The pay-with-bank charge with a redirect URL.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charge/pay-with-bank/banks:
+    get:
+      operationId: listPayWithBankBanks
+      tags:
+        - Charges
+      summary: List Pay with Bank banks
+      description: Retrieves the list of banks supported for Pay with Bank (Instant EFT).
+      responses:
+        '200':
+          description: A list of supported banks.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charges/{reference}:
+    parameters:
+      - $ref: '#/components/parameters/Reference'
+    get:
+      operationId: verifyCharge
+      tags:
+        - Charges
+      summary: Verify / query a charge
+      description: >-
+        Retrieves the current status and details of a charge by its payment
+        reference. Always verify a charge server-side before delivering value.
+      responses:
+        '200':
+          description: The charge status and details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /transactions/disburse:
+    post:
+      operationId: createPayout
+      tags:
+        - Payouts
+      summary: Request a single payout
+      description: >-
+        Disburses funds from your Kora balance to a single bank account or
+        mobile money wallet. Kora notifies your application via webhook when the
+        payout completes.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayoutInput'
+      responses:
+        '200':
+          description: The initiated payout.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /transactions/disburse/bulk:
+    post:
+      operationId: createBulkPayout
+      tags:
+        - Payouts
+      summary: Request a bulk payout
+      description: >-
+        Disburses to multiple destinations in a single batch (minimum 2
+        payouts). Supports NGN and ZAR bank accounts and KES and GHS mobile
+        money. A webhook is sent after each individual payout in the batch
+        completes.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkPayoutInput'
+      responses:
+        '200':
+          description: The initiated bulk payout batch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /transactions/disburse/remittance:
+    post:
+      operationId: createRemittancePayout
+      tags:
+        - Payouts
+      summary: Request a remittance payout
+      description: Disburses a cross-border remittance payout to a supported destination.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayoutInput'
+      responses:
+        '200':
+          description: The initiated remittance payout.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /payouts:
+    get:
+      operationId: listPayouts
+      tags:
+        - Payouts
+      summary: Fetch payout history
+      description: >-
+        Retrieves all payout transactions made from your Kora account. Accepts
+        your secret key as the authorization header and supports date-range and
+        pagination query parameters.
+      parameters:
+        - $ref: '#/components/parameters/StartDate'
+        - $ref: '#/components/parameters/EndDate'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A list of payout transactions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /payouts/availability:
+    get:
+      operationId: getPayoutAvailability
+      tags:
+        - Payouts
+      summary: Check payout availability
+      description: Returns whether payouts are currently available for a destination.
+      responses:
+        '200':
+          description: Payout availability status.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /virtual-bank-account:
+    post:
+      operationId: createVirtualBankAccount
+      tags:
+        - Virtual Bank Accounts
+      summary: Create a virtual bank account
+      description: >-
+        Creates a dedicated NGN or USD virtual bank account (permanent or
+        temporary) tied to a customer, with the KYC information required by the
+        destination market (for example a BVN for NGN accounts).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VirtualBankAccountInput'
+      responses:
+        '200':
+          description: The created virtual bank account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualBankAccount'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /virtual-bank-account/transactions:
+    get:
+      operationId: listVirtualBankAccountTransactions
+      tags:
+        - Virtual Bank Accounts
+      summary: Fetch virtual bank account transactions
+      description: Retrieves the transactions that funded a virtual bank account.
+      parameters:
+        - name: account_number
+          in: query
+          required: true
+          description: The virtual bank account number.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/StartDate'
+        - $ref: '#/components/parameters/EndDate'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A list of transactions on the virtual bank account.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /virtual-bank-account/{accountReference}:
+    parameters:
+      - name: accountReference
+        in: path
+        required: true
+        description: The account_reference supplied when the account was created.
+        schema:
+          type: string
+    get:
+      operationId: getVirtualBankAccount
+      tags:
+        - Virtual Bank Accounts
+      summary: Retrieve a virtual bank account
+      description: Retrieves a virtual bank account by its account reference.
+      responses:
+        '200':
+          description: The virtual bank account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VirtualBankAccount'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /balances:
+    get:
+      operationId: getBalances
+      tags:
+        - Balances
+      summary: Retrieve balances
+      description: >-
+        Returns available and pending balances across all supported currencies
+        (NGN by default, plus USD, GHS, KES, XAF, XOF, ZAR on multi-currency
+        accounts). Requires secret key authentication.
+      responses:
+        '200':
+          description: Balances per currency.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalancesResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /refunds/initiate:
+    post:
+      operationId: initiateRefund
+      tags:
+        - Refunds
+      summary: Initiate a refund
+      description: Initiates a full or partial refund for a completed pay-in transaction.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundInput'
+      responses:
+        '200':
+          description: The initiated refund.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /refunds/{reference}:
+    parameters:
+      - $ref: '#/components/parameters/Reference'
+    get:
+      operationId: getRefund
+      tags:
+        - Refunds
+      summary: Retrieve a refund
+      description: Retrieves the details of a refund by its reference.
+      responses:
+        '200':
+          description: The refund details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /refunds:
+    get:
+      operationId: listRefunds
+      tags:
+        - Refunds
+      summary: List refunds
+      description: Lists refunds within a specified time period.
+      parameters:
+        - $ref: '#/components/parameters/StartDate'
+        - $ref: '#/components/parameters/EndDate'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A list of refunds.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /conversions/rates:
+    post:
+      operationId: getExchangeRate
+      tags:
+        - Currency Conversion
+      summary: Get exchange rate
+      description: Returns the latest exchange rate for a currency pair and amount.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRateInput'
+      responses:
+        '200':
+          description: The exchange rate quote.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /conversions:
+    post:
+      operationId: initiateConversion
+      tags:
+        - Currency Conversion
+      summary: Initiate a currency conversion
+      description: >-
+        Converts funds between your multi-currency balances at the quoted rate.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversionInput'
+      responses:
+        '200':
+          description: The initiated conversion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversionResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      operationId: listConversions
+      tags:
+        - Currency Conversion
+      summary: List conversion history
+      description: Retrieves currency conversion transactions within a given period.
+      parameters:
+        - $ref: '#/components/parameters/StartDate'
+        - $ref: '#/components/parameters/EndDate'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A list of conversions.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /conversions/{reference}:
+    parameters:
+      - $ref: '#/components/parameters/Reference'
+    get:
+      operationId: getConversion
+      tags:
+        - Currency Conversion
+      summary: Retrieve a conversion
+      description: Retrieves a currency conversion transaction by its reference.
+      responses:
+        '200':
+          description: The conversion details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversionResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /misc/banks:
+    get:
+      operationId: listBanks
+      tags:
+        - Misc
+      summary: List banks
+      description: Lists supported banks and their bank codes for a country.
+      parameters:
+        - name: countryCode
+          in: query
+          required: true
+          description: ISO country code, e.g. NG, KE, ZA, GH.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of banks.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /misc/banks/resolve:
+    post:
+      operationId: resolveBankAccount
+      tags:
+        - Misc
+      summary: Resolve a bank account
+      description: >-
+        Verifies a destination bank account and returns the resolved account
+        holder name, given a bank code and account number.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResolveBankInput'
+      responses:
+        '200':
+          description: The resolved account details.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /misc/mobile-money:
+    get:
+      operationId: listMobileMoneyOperators
+      tags:
+        - Misc
+      summary: List mobile money operators
+      description: Lists supported mobile money operators (and their slugs) for a country.
+      parameters:
+        - name: countryCode
+          in: query
+          required: true
+          description: ISO country code, e.g. KE, GH.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of mobile money operators.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /misc/mobile-money/resolve:
+    post:
+      operationId: resolveMobileMoney
+      tags:
+        - Misc
+      summary: Resolve a mobile money number
+      description: Verifies a mobile money account and returns the resolved holder name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: The resolved mobile money details.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /misc/payout-payment-purpose-by-country-code/{countryCode}:
+    parameters:
+      - name: countryCode
+        in: path
+        required: true
+        description: ISO country code of the payout destination.
+        schema:
+          type: string
+    get:
+      operationId: getPayoutPaymentPurpose
+      tags:
+        - Misc
+      summary: Get payout payment purposes by country
+      description: >-
+        Returns the accepted payout payment-purpose values for a country. Some
+        destination countries require a payment purpose on a payout request.
+      responses:
+        '200':
+          description: The accepted payment purposes.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          description: Unsupported country code.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /misc/payout-countries-by-currency-code/{currencyCode}:
+    parameters:
+      - name: currencyCode
+        in: path
+        required: true
+        description: ISO currency code, e.g. USD, NGN.
+        schema:
+          type: string
+    get:
+      operationId: getPayoutCountriesByCurrency
+      tags:
+        - Misc
+      summary: Get supported payout countries by currency
+      description: >-
+        Returns the countries for which Kora has supported banks under a given
+        currency, to confirm coverage before initiating a payout.
+      responses:
+        '200':
+          description: The supported countries.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          description: Unsupported currency code.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    secretKeyAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        Secret API key passed as `Authorization: Bearer sk_...`. Required for
+        server-side and financial operations (payouts, balances, virtual bank
+        accounts, refunds, conversions, charge verification). Test and Live
+        modes use different keys.
+    publicKeyAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        Public API key (`pk_...`) used from client-side code to initiate
+        charges. Cannot access financial data.
+  parameters:
+    Reference:
+      name: reference
+      in: path
+      required: true
+      description: The transaction / payment reference.
+      schema:
+        type: string
+    StartDate:
+      name: start_date
+      in: query
+      required: false
+      description: Start of the date range (ISO 8601).
+      schema:
+        type: string
+        format: date
+    EndDate:
+      name: end_date
+      in: query
+      required: false
+      description: End of the date range (ISO 8601).
+      schema:
+        type: string
+        format: date
+    Page:
+      name: page
+      in: query
+      required: false
+      description: Page number for pagination.
+      schema:
+        type: integer
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Number of records per page.
+      schema:
+        type: integer
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+    Customer:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+    InitializeChargeInput:
+      type: object
+      required:
+        - reference
+        - amount
+        - currency
+        - customer
+      properties:
+        reference:
+          type: string
+          description: Unique merchant reference for the transaction.
+        amount:
+          type: number
+        currency:
+          type: string
+          example: NGN
+        redirect_url:
+          type: string
+          format: uri
+        notification_url:
+          type: string
+          format: uri
+        narration:
+          type: string
+        customer:
+          $ref: '#/components/schemas/Customer'
+        metadata:
+          type: object
+          additionalProperties: true
+    EncryptedChargeInput:
+      type: object
+      required:
+        - charge_data
+      properties:
+        charge_data:
+          type: string
+          description: >-
+            The card charge payload (reference, card, amount, currency,
+            customer, redirect_url, metadata) AES-256 encrypted with your
+            encryption key.
+    CardAuthorizationInput:
+      type: object
+      required:
+        - transaction_reference
+        - authorization
+      properties:
+        transaction_reference:
+          type: string
+        authorization:
+          type: object
+          description: The authorization payload - pin, otp, avs/address, or phone.
+          additionalProperties: true
+    MobileMoneyChargeInput:
+      type: object
+      required:
+        - reference
+        - amount
+        - currency
+        - mobile_money
+        - customer
+      properties:
+        reference:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+          example: KES
+        mobile_money:
+          type: object
+          properties:
+            number:
+              type: string
+              example: '254700000000'
+        notification_url:
+          type: string
+          format: uri
+        merchant_bears_cost:
+          type: boolean
+          default: false
+        narration:
+          type: string
+        customer:
+          $ref: '#/components/schemas/Customer'
+    MobileMoneyAuthorizationInput:
+      type: object
+      required:
+        - transaction_reference
+        - authorization
+      properties:
+        transaction_reference:
+          type: string
+        authorization:
+          type: object
+          properties:
+            otp:
+              type: string
+    PayWithBankInput:
+      type: object
+      required:
+        - reference
+        - amount
+        - currency
+        - customer
+      properties:
+        reference:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+          example: ZAR
+        redirect_url:
+          type: string
+          format: uri
+        notification_url:
+          type: string
+          format: uri
+        customer:
+          $ref: '#/components/schemas/Customer'
+    ChargeResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            reference:
+              type: string
+            transaction_reference:
+              type: string
+            status:
+              type: string
+              enum:
+                - success
+                - processing
+                - failed
+                - pending
+            auth_model:
+              type: string
+              description: OTP, PIN, STK_PROMPT, REDIRECT, AVS, PHONE, etc.
+            amount:
+              type: number
+            currency:
+              type: string
+            checkout_url:
+              type: string
+              format: uri
+            redirect_url:
+              type: string
+              format: uri
+          additionalProperties: true
+    PayoutInput:
+      type: object
+      required:
+        - reference
+        - amount
+        - currency
+        - destination
+      properties:
+        reference:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+          example: NGN
+        merchant_bears_cost:
+          type: boolean
+          default: false
+        narration:
+          type: string
+        destination:
+          type: object
+          description: The payout destination - bank account or mobile money details.
+          properties:
+            type:
+              type: string
+              enum:
+                - bank_account
+                - mobile_money
+            amount:
+              type: number
+            currency:
+              type: string
+            bank_account:
+              type: object
+              properties:
+                bank:
+                  type: string
+                account:
+                  type: string
+            customer:
+              $ref: '#/components/schemas/Customer'
+          additionalProperties: true
+    BulkPayoutInput:
+      type: object
+      required:
+        - batch_reference
+        - currency
+        - payouts
+      properties:
+        batch_reference:
+          type: string
+          description: Unique reference for the batch (5-50 characters).
+        description:
+          type: string
+        merchant_bears_cost:
+          type: boolean
+          default: false
+        currency:
+          type: string
+          example: NGN
+        payouts:
+          type: array
+          description: Between 2 and the batch maximum individual payouts.
+          items:
+            $ref: '#/components/schemas/PayoutInput'
+    PayoutResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+    PayoutList:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    VirtualBankAccountInput:
+      type: object
+      required:
+        - account_name
+        - account_reference
+        - permanent
+        - bank_code
+        - customer
+        - kyc
+      properties:
+        account_name:
+          type: string
+        account_reference:
+          type: string
+        permanent:
+          type: boolean
+        bank_code:
+          type: string
+        customer:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+        kyc:
+          type: object
+          description: KYC identifiers required for the destination market.
+          properties:
+            bvn:
+              type: string
+              description: Bank Verification Number (required for NGN accounts).
+    VirtualBankAccount:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            account_reference:
+              type: string
+            account_number:
+              type: string
+            account_name:
+              type: string
+            bank_code:
+              type: string
+            bank_name:
+              type: string
+            currency:
+              type: string
+          additionalProperties: true
+    BalancesResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          description: Map of currency code to balance object.
+          additionalProperties:
+            type: object
+            properties:
+              pending_balance:
+                type: number
+              available_balance:
+                type: number
+              issuing_balance:
+                type: number
+    RefundInput:
+      type: object
+      required:
+        - reference
+        - transaction_reference
+      properties:
+        reference:
+          type: string
+          description: Unique merchant reference for the refund.
+        transaction_reference:
+          type: string
+          description: The reference of the pay-in transaction to refund.
+        amount:
+          type: number
+          description: Optional partial refund amount; omit for a full refund.
+        reason:
+          type: string
+    RefundResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+    ExchangeRateInput:
+      type: object
+      required:
+        - from_currency
+        - to_currency
+        - amount
+      properties:
+        from_currency:
+          type: string
+        to_currency:
+          type: string
+        amount:
+          type: number
+    ConversionInput:
+      type: object
+      required:
+        - reference
+        - from_currency
+        - to_currency
+        - amount
+      properties:
+        reference:
+          type: string
+        from_currency:
+          type: string
+        to_currency:
+          type: string
+        amount:
+          type: number
+    ConversionResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+    ResolveBankInput:
+      type: object
+      required:
+        - bank
+        - account
+      properties:
+        bank:
+          type: string
+          description: The bank code.
+        account:
+          type: string
+          description: The account number to resolve.
+        currency:
+          type: string
+    BankList:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              code:
+                type: string
+            additionalProperties: true

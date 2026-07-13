@@ -1,0 +1,150 @@
+aid: korapay
+name: Kora
+review:
+  question: Does Kora expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-12'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. Kora's public API is request/response
+    REST over HTTPS at https://api.korapay.com/merchant/api/v1. Asynchronous
+    transaction updates are delivered as webhooks (Kora POSTs to a merchant
+    notification_url), authenticated with an x-korapay-signature HMAC SHA-256
+    header. Webhooks are server-to-endpoint HTTP callbacks, not a server-push
+    streaming transport (no WebSocket or SSE) on Kora's own API, so there is no
+    in-scope AsyncAPI channel to model.
+findings:
+  summary: |
+    Kora (formerly Korapay) does not publish a documented public WebSocket API.
+    Kora is a pan-African payments infrastructure provider. Its public surface
+    is a REST API under https://api.korapay.com/merchant/api/v1, authenticated
+    with public (pk_) and secret (sk_) API keys across separate Test and Live
+    modes. Card charge payloads are AES-256 encrypted with an encryption key.
+    Asynchronous results (charge completion, payout completion, per-item bulk
+    payout results) arrive as webhooks verified with an HMAC SHA-256
+    x-korapay-signature header over the payload's data object. No realtime,
+    bidirectional, or streaming WebSocket (ws:// or wss://) endpoint is
+    documented anywhere in Kora's developer documentation as of the review date.
+  authModel: |
+    Two API key types: public keys (pk_, client-side, transaction-initiation
+    only) and secret keys (sk_, server-side, required for financial data and all
+    account operations, passed as Authorization: Bearer sk_...). Test and Live
+    modes each have their own keys. Card payments require AES-256 encryption of
+    the charge payload with the account encryption key and PCI DSS Level 1
+    certification. Webhooks are verified with HMAC SHA-256 (x-korapay-signature)
+    computed over the data object using the secret key.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.korapay.com/merchant/api/v1
+      documented: true
+      note: All documented merchant endpoints are HTTPS REST.
+    - protocol: Webhook
+      scheme: https
+      documented: true
+      note: Kora POSTs transaction/payout events to a merchant notification_url, signed with an x-korapay-signature HMAC SHA-256 header. Server-to-endpoint HTTP, not WebSocket.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in any Kora developer documentation page as of the review date.
+  endpointsConfirmedRest:
+    - POST https://api.korapay.com/merchant/api/v1/charges/initialize
+    - POST https://api.korapay.com/merchant/api/v1/charges/card
+    - POST https://api.korapay.com/merchant/api/v1/charges/mobile-money
+    - POST https://api.korapay.com/merchant/api/v1/charges/mobile-money/authorize
+    - POST https://api.korapay.com/merchant/api/v1/charge/pay-with-bank
+    - GET  https://api.korapay.com/merchant/api/v1/charge/pay-with-bank/banks
+    - GET  https://api.korapay.com/merchant/api/v1/charges/{reference}
+    - POST https://api.korapay.com/merchant/api/v1/transactions/disburse
+    - POST https://api.korapay.com/merchant/api/v1/transactions/disburse/bulk
+    - POST https://api.korapay.com/merchant/api/v1/transactions/disburse/remittance
+    - GET  https://api.korapay.com/merchant/api/v1/payouts
+    - GET  https://api.korapay.com/merchant/api/v1/payouts/availability
+    - POST https://api.korapay.com/merchant/api/v1/virtual-bank-account
+    - GET  https://api.korapay.com/merchant/api/v1/virtual-bank-account/{accountReference}
+    - GET  https://api.korapay.com/merchant/api/v1/virtual-bank-account/transactions
+    - GET  https://api.korapay.com/merchant/api/v1/balances
+    - POST https://api.korapay.com/merchant/api/v1/refunds/initiate
+    - GET  https://api.korapay.com/merchant/api/v1/refunds/{reference}
+    - GET  https://api.korapay.com/merchant/api/v1/refunds
+    - POST https://api.korapay.com/merchant/api/v1/conversions/rates
+    - POST https://api.korapay.com/merchant/api/v1/conversions
+    - GET  https://api.korapay.com/merchant/api/v1/conversions
+    - GET  https://api.korapay.com/merchant/api/v1/conversions/{reference}
+    - GET  https://api.korapay.com/merchant/api/v1/misc/banks
+    - POST https://api.korapay.com/merchant/api/v1/misc/banks/resolve
+    - GET  https://api.korapay.com/merchant/api/v1/misc/mobile-money
+    - POST https://api.korapay.com/merchant/api/v1/misc/mobile-money/resolve
+    - GET  https://api.korapay.com/merchant/api/v1/misc/payout-payment-purpose-by-country-code/{countryCode}
+    - GET  https://api.korapay.com/merchant/api/v1/misc/payout-countries-by-currency-code/{currencyCode}
+  endpointsModeled:
+    - POST https://api.korapay.com/merchant/api/v1/charges/card/authorize
+  modeledNote: |
+    The card-charge authorization step is documented (Kora describes submitting
+    PIN / OTP / AVS / phone to an "authorize charge endpoint") but the docs link
+    to a Postman entry rather than printing the literal path, so
+    /charges/card/authorize is an inferred path by convention (parallel to the
+    confirmed /charges/mobile-money/authorize). It is flagged in the OpenAPI
+    description and should be verified against Kora's Postman collection before
+    use. Request and response bodies throughout the OpenAPI are simplified
+    representative schemas, not field-complete contracts. Note also a base-path
+    nuance: some doc pages (conversions, pay-with-bank) print paths as
+    {{baseurl}}/api/v1/... while the confirmed full-URL examples (card, refunds,
+    virtual accounts, balances, mobile money) consistently use
+    api.korapay.com/merchant/api/v1/...; this entry standardizes on the latter.
+  webhookVerification: |
+    x-korapay-signature = HMAC SHA-256 over JSON.stringify(payload.data) using
+    the merchant secret key. Confirmed in Kora's webhooks documentation with
+    Node.js, Java, and PHP examples.
+sources:
+  - url: https://developers.korapay.com/docs/getting-started
+    type: Documentation
+    note: Overview of Kora products and getting started.
+  - url: https://developers.korapay.com/docs/api-keys
+    type: Documentation
+    note: Public vs secret keys; Test vs Live modes.
+  - url: https://developers.korapay.com/docs/accepting-card-payments-with-apis
+    type: APIReference
+    note: Confirmed POST /charges/card (encrypted charge_data) and GET /charges/{reference} verify; PCI DSS Level 1 requirement.
+  - url: https://developers.korapay.com/docs/mobile-money-apis
+    type: APIReference
+    note: Confirmed POST /charges/mobile-money and /charges/mobile-money/authorize; auth models OTP/STK_PROMPT/REDIRECT.
+  - url: https://developers.korapay.com/docs/payout-via-api
+    type: APIReference
+    note: Confirmed /transactions/disburse, /transactions/disburse/remittance, /payouts, /payouts/availability, /misc/banks, /misc/banks/resolve, /misc/mobile-money.
+  - url: https://developers.korapay.com/docs/bulk-payouts-via-api
+    type: APIReference
+    note: Confirmed POST /transactions/disburse/bulk; per-item webhooks.
+  - url: https://developers.korapay.com/docs/payout-utilities
+    type: APIReference
+    note: Confirmed /misc/payout-payment-purpose-by-country-code and /misc/payout-countries-by-currency-code.
+  - url: https://developers.korapay.com/docs/virtual-bank-accounts-ngn
+    type: APIReference
+    note: Confirmed POST /virtual-bank-account, GET /virtual-bank-account/{ref}, GET /virtual-bank-account/transactions.
+  - url: https://developers.korapay.com/docs/balance-api
+    type: APIReference
+    note: Confirmed GET /balances; multi-currency available/pending balances; secret key required.
+  - url: https://developers.korapay.com/docs/refunds-api
+    type: APIReference
+    note: Confirmed /refunds/initiate, /refunds/{reference}, /refunds.
+  - url: https://developers.korapay.com/docs/currency-conversion-api
+    type: APIReference
+    note: Confirmed POST /conversions, GET /conversions, GET /conversions/{reference}.
+  - url: https://developers.korapay.com/docs/exchange-rate-api
+    type: APIReference
+    note: Confirmed POST /conversions/rates.
+  - url: https://developers.korapay.com/docs/pay-with-bank-instant-eft
+    type: APIReference
+    note: Confirmed POST /charge/pay-with-bank and GET /charge/pay-with-bank/banks.
+  - url: https://developers.korapay.com/docs/webhooks
+    type: Documentation
+    note: x-korapay-signature HMAC SHA-256 over the data object; no WebSocket transport.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists. Kora's own public API is
+    request/response REST plus signed HTTP webhooks. No AsyncAPI document was
+    created because there is no server-push streaming transport (WebSocket or
+    SSE) on Kora's own API to model; webhooks are point-to-point HTTP callbacks.

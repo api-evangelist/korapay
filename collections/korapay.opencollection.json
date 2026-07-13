@@ -1,0 +1,310 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Kora (Korapay) Merchant API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{secretKey}}"
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Charges", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Initialize a charge", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/charges/initialize",
+            "auth": { "type": "bearer", "token": "{{publicKey}}" },
+            "body": { "type": "json", "data": "{\n  \"reference\": \"charge-ref-001\",\n  \"amount\": 1000,\n  \"currency\": \"NGN\",\n  \"redirect_url\": \"https://merchant-redirect-url.com\",\n  \"customer\": { \"name\": \"John Doe\", \"email\": \"johndoe@korapay.com\" }\n}" }
+          },
+          "docs": "Initializes a checkout charge and returns a hosted checkout URL. Uses the public key."
+        },
+        {
+          "info": { "name": "Charge a card", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/charges/card",
+            "body": { "type": "json", "data": "{\n  \"charge_data\": \"<AES-256-encrypted-card-payload>\"\n}" }
+          },
+          "docs": "Charges a card. The card/payment data must be AES-256 encrypted with your encryption key and sent as charge_data."
+        },
+        {
+          "info": { "name": "Authorize a card charge (path inferred)", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/charges/card/authorize",
+            "body": { "type": "json", "data": "{\n  \"transaction_reference\": \"KPY-...\",\n  \"authorization\": { \"pin\": \"1234\" }\n}" }
+          },
+          "docs": "Completes a processing card charge with PIN/OTP/AVS/phone. NOTE: path inferred by convention; verify against Kora's Postman docs."
+        },
+        {
+          "info": { "name": "Charge mobile money", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/charges/mobile-money",
+            "body": { "type": "json", "data": "{\n  \"reference\": \"mm-ref-001\",\n  \"amount\": 1000,\n  \"currency\": \"KES\",\n  \"mobile_money\": { \"number\": \"254700000000\" },\n  \"customer\": { \"name\": \"Jane Doe\", \"email\": \"jane@korapay.com\" }\n}" }
+          },
+          "docs": "Charges a mobile money wallet (KES, GHS, XAF, XOF, EGP, TZS). Response auth_model indicates the next step."
+        },
+        {
+          "info": { "name": "Authorize mobile money charge", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/charges/mobile-money/authorize",
+            "body": { "type": "json", "data": "{\n  \"transaction_reference\": \"KPY-PAY-...\",\n  \"authorization\": { \"otp\": \"123456\" }\n}" }
+          },
+          "docs": "Submits the OTP for a mobile money charge whose auth_model was OTP."
+        },
+        {
+          "info": { "name": "Charge with Pay with Bank", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/charge/pay-with-bank",
+            "body": { "type": "json", "data": "{\n  \"reference\": \"pwb-ref-001\",\n  \"amount\": 1000,\n  \"currency\": \"ZAR\",\n  \"redirect_url\": \"https://merchant-redirect-url.com\",\n  \"customer\": { \"name\": \"Sam Doe\", \"email\": \"sam@korapay.com\" }\n}" }
+          },
+          "docs": "Initiates a Pay with Bank (Instant EFT / direct debit) charge and returns a redirect URL."
+        },
+        {
+          "info": { "name": "List Pay with Bank banks", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.korapay.com/merchant/api/v1/charge/pay-with-bank/banks" },
+          "docs": "Lists banks supported for Pay with Bank (Instant EFT)."
+        },
+        {
+          "info": { "name": "Verify / query a charge", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/charges/:reference",
+            "params": [ { "name": "reference", "value": "", "type": "path", "description": "The payment reference." } ]
+          },
+          "docs": "Retrieves the current status and details of a charge by its payment reference."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Payouts", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Request a single payout", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/transactions/disburse",
+            "body": { "type": "json", "data": "{\n  \"reference\": \"payout-ref-001\",\n  \"amount\": 5000,\n  \"currency\": \"NGN\",\n  \"destination\": {\n    \"type\": \"bank_account\",\n    \"amount\": 5000,\n    \"currency\": \"NGN\",\n    \"bank_account\": { \"bank\": \"044\", \"account\": \"0000000000\" },\n    \"customer\": { \"name\": \"John Doe\", \"email\": \"johndoe@korapay.com\" }\n  }\n}" }
+          },
+          "docs": "Disburses funds from your balance to a single bank account or mobile money wallet."
+        },
+        {
+          "info": { "name": "Request a bulk payout", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/transactions/disburse/bulk",
+            "body": { "type": "json", "data": "{\n  \"batch_reference\": \"batch-001\",\n  \"currency\": \"NGN\",\n  \"merchant_bears_cost\": false,\n  \"payouts\": [ {}, {} ]\n}" }
+          },
+          "docs": "Disburses to multiple destinations in one batch (minimum 2 payouts)."
+        },
+        {
+          "info": { "name": "Request a remittance payout", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/transactions/disburse/remittance",
+            "body": { "type": "json", "data": "{\n  \"reference\": \"rem-ref-001\",\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"destination\": {}\n}" }
+          },
+          "docs": "Disburses a cross-border remittance payout."
+        },
+        {
+          "info": { "name": "Fetch payout history", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/payouts?page=1&limit=20",
+            "params": [ { "name": "page", "value": "1", "type": "query" }, { "name": "limit", "value": "20", "type": "query" } ]
+          },
+          "docs": "Retrieves all payout transactions from your account (secret key auth)."
+        },
+        {
+          "info": { "name": "Check payout availability", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.korapay.com/merchant/api/v1/payouts/availability" },
+          "docs": "Returns whether payouts are currently available for a destination."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Virtual Bank Accounts", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a virtual bank account", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/virtual-bank-account",
+            "body": { "type": "json", "data": "{\n  \"account_name\": \"John Doe\",\n  \"account_reference\": \"vba-ref-001\",\n  \"permanent\": true,\n  \"bank_code\": \"035\",\n  \"customer\": { \"name\": \"John Doe\" },\n  \"kyc\": { \"bvn\": \"00000000000\" }\n}" }
+          },
+          "docs": "Creates a dedicated NGN or USD virtual bank account tied to a customer."
+        },
+        {
+          "info": { "name": "Retrieve a virtual bank account", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/virtual-bank-account/:accountReference",
+            "params": [ { "name": "accountReference", "value": "", "type": "path", "description": "The account_reference used at creation." } ]
+          },
+          "docs": "Retrieves a virtual bank account by its account reference."
+        },
+        {
+          "info": { "name": "Fetch virtual bank account transactions", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/virtual-bank-account/transactions?account_number=0000000000",
+            "params": [ { "name": "account_number", "value": "0000000000", "type": "query", "description": "The virtual bank account number." } ]
+          },
+          "docs": "Retrieves the transactions that funded a virtual bank account."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Balances", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Retrieve balances", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.korapay.com/merchant/api/v1/balances" },
+          "docs": "Returns available and pending balances across supported currencies (secret key auth)."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Refunds", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Initiate a refund", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/refunds/initiate",
+            "body": { "type": "json", "data": "{\n  \"reference\": \"refund-ref-001\",\n  \"transaction_reference\": \"KPY-...\",\n  \"reason\": \"Customer request\"\n}" }
+          },
+          "docs": "Initiates a full or partial refund for a completed pay-in transaction."
+        },
+        {
+          "info": { "name": "Retrieve a refund", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/refunds/:reference",
+            "params": [ { "name": "reference", "value": "", "type": "path", "description": "The refund reference." } ]
+          },
+          "docs": "Retrieves the details of a refund by its reference."
+        },
+        {
+          "info": { "name": "List refunds", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/refunds?page=1&limit=20",
+            "params": [ { "name": "page", "value": "1", "type": "query" }, { "name": "limit", "value": "20", "type": "query" } ]
+          },
+          "docs": "Lists refunds within a specified time period."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Currency Conversion", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get exchange rate", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/conversions/rates",
+            "body": { "type": "json", "data": "{\n  \"from_currency\": \"USD\",\n  \"to_currency\": \"NGN\",\n  \"amount\": 100\n}" }
+          },
+          "docs": "Returns the latest exchange rate for a currency pair and amount."
+        },
+        {
+          "info": { "name": "Initiate a currency conversion", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/conversions",
+            "body": { "type": "json", "data": "{\n  \"reference\": \"conv-ref-001\",\n  \"from_currency\": \"USD\",\n  \"to_currency\": \"NGN\",\n  \"amount\": 100\n}" }
+          },
+          "docs": "Converts funds between your multi-currency balances at the quoted rate."
+        },
+        {
+          "info": { "name": "Retrieve a conversion", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/conversions/:reference",
+            "params": [ { "name": "reference", "value": "", "type": "path", "description": "The conversion reference." } ]
+          },
+          "docs": "Retrieves a currency conversion transaction by its reference."
+        },
+        {
+          "info": { "name": "List conversion history", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/conversions?page=1&limit=20",
+            "params": [ { "name": "page", "value": "1", "type": "query" }, { "name": "limit", "value": "20", "type": "query" } ]
+          },
+          "docs": "Retrieves currency conversion transactions within a given period."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Misc", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List banks", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/misc/banks?countryCode=NG",
+            "params": [ { "name": "countryCode", "value": "NG", "type": "query", "description": "ISO country code." } ]
+          },
+          "docs": "Lists supported banks and bank codes for a country."
+        },
+        {
+          "info": { "name": "Resolve a bank account", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/misc/banks/resolve",
+            "body": { "type": "json", "data": "{\n  \"bank\": \"044\",\n  \"account\": \"0000000000\",\n  \"currency\": \"NGN\"\n}" }
+          },
+          "docs": "Verifies a destination bank account and returns the resolved account holder name."
+        },
+        {
+          "info": { "name": "List mobile money operators", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/misc/mobile-money?countryCode=KE",
+            "params": [ { "name": "countryCode", "value": "KE", "type": "query", "description": "ISO country code." } ]
+          },
+          "docs": "Lists supported mobile money operators and slugs for a country."
+        },
+        {
+          "info": { "name": "Resolve a mobile money number", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/misc/mobile-money/resolve",
+            "body": { "type": "json", "data": "{\n  \"mobile_money\": { \"number\": \"254700000000\" },\n  \"currency\": \"KES\"\n}" }
+          },
+          "docs": "Verifies a mobile money account and returns the resolved holder name."
+        },
+        {
+          "info": { "name": "Get payout payment purposes by country", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/misc/payout-payment-purpose-by-country-code/:countryCode",
+            "params": [ { "name": "countryCode", "value": "US", "type": "path", "description": "ISO country code of the destination." } ]
+          },
+          "docs": "Returns accepted payout payment-purpose values for a country."
+        },
+        {
+          "info": { "name": "Get supported payout countries by currency", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/misc/payout-countries-by-currency-code/:currencyCode",
+            "params": [ { "name": "currencyCode", "value": "USD", "type": "path", "description": "ISO currency code." } ]
+          },
+          "docs": "Returns countries with supported banks under a given currency."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

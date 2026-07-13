@@ -1,0 +1,114 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Kora
+providerId: korapay
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Payments
+- Payment Gateway
+- Africa
+- Nigeria
+- Fintech
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Kora spend. Kora is a payments processor, so cost is
+  transaction-based rather than a subscription or per-API-call fee: you pay a
+  percentage and/or flat fee per pay-in (card, bank transfer, mobile money,
+  pay-with-bank), per payout/disbursement (single, bulk, remittance), and on
+  currency conversions, plus any card-issuing and identity/verification usage.
+  Fees vary by product, channel, currency, and market, and can be borne by the
+  merchant or passed to the customer via the merchant_bears_cost flag. Test mode
+  is free. Publicly referenced figures include local Nigerian card processing
+  around 1.5% per transaction, with international cards higher and payout fees
+  charged as flat per-transfer amounts by tier - but these are indicative only.
+notes: >-
+  Per-transaction rates are NOT reconciled here and change over time and by
+  market; several fees are disclosed only on request. Verify current pricing on
+  korahq.com and support.korapay.com, or with your Kora account manager, during
+  reconciliation. The merchant_bears_cost flag on charges and payouts determines
+  whether the fee is deducted from the merchant or the customer.
+sources:
+- https://www.korahq.com/
+- https://developers.korapay.com/docs/getting-started
+- https://support.korapay.com/hc/en-us/articles/33567660971410-Card-Payments
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Kora
+serviceCategory: Payments and Financial Services
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Per-Transaction
+  billingCurrency: NGN
+  chargeCategories:
+  - Usage
+  - Adjustment
+focusColumns:
+  ServiceName: Kora Payments
+  ServiceCategory: Payments and Financial Services
+  ProviderName: Kora
+  PublisherName: Kora
+  InvoiceIssuerName: Kora
+  BillingCurrency: NGN
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: payin_card
+  description: Card pay-ins, billed as a percentage per transaction (indicatively ~1.5% for local NGN cards; international cards higher).
+  unit: transactions
+  aggregation: sum
+  dimensions:
+  - account
+  - currency
+  - card_scheme
+- name: payin_bank_transfer
+  description: Bank transfer / virtual bank account pay-ins, billed per transaction.
+  unit: transactions
+  aggregation: sum
+  dimensions:
+  - account
+  - currency
+- name: payin_mobile_money
+  description: Mobile money pay-ins, billed per transaction by market.
+  unit: transactions
+  aggregation: sum
+  dimensions:
+  - account
+  - currency
+  - operator
+- name: payout_transfer
+  description: Payouts / disbursements to bank accounts and mobile money, billed as a flat fee per transfer by tier and destination.
+  unit: transactions
+  aggregation: sum
+  dimensions:
+  - account
+  - currency
+  - destination_type
+- name: currency_conversion
+  description: Multi-currency conversions, priced via the applied exchange-rate spread.
+  unit: transactions
+  aggregation: sum
+  dimensions:
+  - account
+  - currency_pair
+principles:
+- name: Visibility
+  description: Reconcile transaction fees from the Kora dashboard and webhooks; track fee per product, channel, currency, and market.
+- name: Allocation
+  description: Tag transactions with unique references/metadata per workload, customer, or team to map processing fees to internal cost centers.
+- name: Optimization
+  description: Route pay-ins to lower-cost channels where possible (for example bank transfer / virtual accounts vs card); batch disbursements via bulk payouts; use merchant_bears_cost deliberately; negotiate volume pricing at scale.
+- name: Accountability
+  description: Assign owners per product line; review monthly processing spend and effective take-rate against budget and against negotiated rates.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

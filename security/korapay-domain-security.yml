@@ -1,0 +1,40 @@
+generated: '2026-07-12'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + API hosts
+hosts:
+- host: api.korapay.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug 27 12:38:39 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+  hsts_include_subdomains: true
+- host: korapay.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  3 13:37:59 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: korahq.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  3 06:25:34 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: developers.korapay.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug 31 19:30:48 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+domains:
+- domain: korapay.com
+  dnssec: false
+  caa: []
+  spf: true
+  spf_policy: '-all'
+  dmarc: true
+  dmarc_policy: reject
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,118 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Kora
+providerId: korapay
+created: '2026-07-12'
+modified: '2026-07-12'
+reconciled: false
+tags:
+- Payments
+- Payment Gateway
+- Africa
+- Nigeria
+- Fintech
+- Plans
+description: >-
+  Kora does not sell tiered API plans; it is a payments processor whose revenue
+  model is transaction-based (a percentage and/or flat fee per pay-in, payout,
+  conversion, or card-issuing action). Access is via a single self-service
+  merchant account that must be activated (KYC/KYB and go-live requirements)
+  before Live mode. A free Test/sandbox mode is available immediately with test
+  API keys. Some products - card payments and mobile money - must be explicitly
+  enabled on an account by Kora support. Larger merchants negotiate custom
+  pricing directly with Kora. Exact per-transaction rates are not reconciled
+  here; see the FinOps file and Kora's pricing/support pages.
+notes: >-
+  There are no metered "API call" plans - you are billed on payment volume, not
+  on requests. Verify current per-transaction rates, limits, and settlement
+  timelines with Kora (korahq.com pricing and support.korapay.com) during
+  reconciliation.
+sources:
+- https://developers.korapay.com/docs/getting-started
+- https://developers.korapay.com/docs/api-keys
+- https://www.korahq.com/
+- https://support.korapay.com/hc/en-us/articles/33567660971410-Card-Payments
+plans:
+- id: korapay-test
+  name: Test / Sandbox Mode
+  type: free
+  description: >-
+    Free sandbox available on signup with dedicated test API keys. Simulate
+    charges, payouts, virtual accounts, conversions, and webhooks with test data
+    before going live. No transaction fees in test mode.
+  entries:
+  - label: Sandbox Access
+    name: sandbox_access
+    type: usage
+    metric: transactions
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free (test mode)
+    userMultiplied: false
+  elements:
+  - name: Test API Keys
+  - name: All Products in Sandbox
+  - name: Webhook Testing
+- id: korapay-live
+  name: Live (Pay-As-You-Go)
+  type: usage
+  description: >-
+    Live processing after account activation (KYC/KYB and go-live requirements).
+    Billed per transaction - a percentage and/or flat fee that varies by product
+    (card, bank transfer, mobile money, pay-with-bank), payout type, currency,
+    and market. Some products require Kora to enable them on your account.
+  entries:
+  - label: Pay-In Processing Fee
+    name: payin_fee
+    type: usage
+    metric: transactions
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: per-transaction percentage and/or flat fee (see FinOps; verify with Kora)
+    userMultiplied: false
+  - label: Payout / Disbursement Fee
+    name: payout_fee
+    type: usage
+    metric: transactions
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: per-transaction flat fee by tier and destination (verify with Kora)
+    userMultiplied: false
+  elements:
+  - name: Pay-Ins (Card, Bank Transfer, Mobile Money, Pay with Bank)
+  - name: Payouts (Single, Bulk, Remittance)
+  - name: Virtual Bank Accounts
+  - name: Currency Conversion
+  - name: Balances and Refunds
+- id: korapay-enterprise
+  name: Custom / Enterprise
+  type: enterprise
+  description: >-
+    Negotiated pricing for high-volume merchants and platforms, with volume
+    discounts, dedicated support, and additional products (for example card
+    issuing and identity/verification). Contact Kora.
+  entries:
+  - label: Custom Agreement
+    name: custom
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Volume-Based Pricing
+  - name: Dedicated Support
+  - name: Card Issuing and Identity Products
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

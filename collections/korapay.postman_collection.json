@@ -1,0 +1,341 @@
+{
+  "info": {
+    "name": "Kora (Korapay) Merchant API",
+    "description": "Representative collection for the Kora pan-African payments REST API. Base URL: https://api.korapay.com/merchant/api/v1. Authenticate financial/server-side calls with your secret key (Authorization: Bearer sk_...); initialize charges client-side with your public key (pk_...). Card charge payloads must be AES-256 encrypted (charge_data). Webhooks are verified with an x-korapay-signature HMAC SHA-256 header. Test and Live modes use different keys.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{secretKey}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.korapay.com/merchant/api/v1", "type": "string" },
+    { "key": "secretKey", "value": "", "type": "string" },
+    { "key": "publicKey", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Charges",
+      "item": [
+        {
+          "name": "Initialize a charge",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{publicKey}}", "type": "string" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"reference\": \"charge-ref-001\",\n  \"amount\": 1000,\n  \"currency\": \"NGN\",\n  \"redirect_url\": \"https://merchant-redirect-url.com\",\n  \"customer\": { \"name\": \"John Doe\", \"email\": \"johndoe@korapay.com\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/charges/initialize", "host": ["{{baseUrl}}"], "path": ["charges", "initialize"] },
+            "description": "Initializes a checkout charge and returns a hosted checkout URL. Uses the public key."
+          }
+        },
+        {
+          "name": "Charge a card",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"charge_data\": \"<AES-256-encrypted-card-payload>\"\n}" },
+            "url": { "raw": "{{baseUrl}}/charges/card", "host": ["{{baseUrl}}"], "path": ["charges", "card"] },
+            "description": "Charges a card. The card/payment data must be AES-256 encrypted with your encryption key and sent as charge_data."
+          }
+        },
+        {
+          "name": "Authorize a card charge (path inferred)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"transaction_reference\": \"KPY-...\",\n  \"authorization\": { \"pin\": \"1234\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/charges/card/authorize", "host": ["{{baseUrl}}"], "path": ["charges", "card", "authorize"] },
+            "description": "Completes a processing card charge with PIN/OTP/AVS/phone. NOTE: path inferred by convention; verify against Kora's Postman docs."
+          }
+        },
+        {
+          "name": "Charge mobile money",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"reference\": \"mm-ref-001\",\n  \"amount\": 1000,\n  \"currency\": \"KES\",\n  \"mobile_money\": { \"number\": \"254700000000\" },\n  \"customer\": { \"name\": \"Jane Doe\", \"email\": \"jane@korapay.com\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/charges/mobile-money", "host": ["{{baseUrl}}"], "path": ["charges", "mobile-money"] },
+            "description": "Charges a mobile money wallet (KES, GHS, XAF, XOF, EGP, TZS). Response auth_model indicates the next step."
+          }
+        },
+        {
+          "name": "Authorize mobile money charge",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"transaction_reference\": \"KPY-PAY-...\",\n  \"authorization\": { \"otp\": \"123456\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/charges/mobile-money/authorize", "host": ["{{baseUrl}}"], "path": ["charges", "mobile-money", "authorize"] },
+            "description": "Submits the OTP for a mobile money charge whose auth_model was OTP."
+          }
+        },
+        {
+          "name": "Charge with Pay with Bank",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"reference\": \"pwb-ref-001\",\n  \"amount\": 1000,\n  \"currency\": \"ZAR\",\n  \"redirect_url\": \"https://merchant-redirect-url.com\",\n  \"customer\": { \"name\": \"Sam Doe\", \"email\": \"sam@korapay.com\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/charge/pay-with-bank", "host": ["{{baseUrl}}"], "path": ["charge", "pay-with-bank"] },
+            "description": "Initiates a Pay with Bank (Instant EFT / direct debit) charge and returns a redirect URL."
+          }
+        },
+        {
+          "name": "List Pay with Bank banks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/charge/pay-with-bank/banks", "host": ["{{baseUrl}}"], "path": ["charge", "pay-with-bank", "banks"] },
+            "description": "Lists banks supported for Pay with Bank (Instant EFT)."
+          }
+        },
+        {
+          "name": "Verify / query a charge",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/charges/:reference", "host": ["{{baseUrl}}"], "path": ["charges", ":reference"], "variable": [{ "key": "reference", "value": "" }] },
+            "description": "Retrieves the current status and details of a charge by its payment reference."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payouts",
+      "item": [
+        {
+          "name": "Request a single payout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"reference\": \"payout-ref-001\",\n  \"amount\": 5000,\n  \"currency\": \"NGN\",\n  \"destination\": {\n    \"type\": \"bank_account\",\n    \"amount\": 5000,\n    \"currency\": \"NGN\",\n    \"bank_account\": { \"bank\": \"044\", \"account\": \"0000000000\" },\n    \"customer\": { \"name\": \"John Doe\", \"email\": \"johndoe@korapay.com\" }\n  }\n}" },
+            "url": { "raw": "{{baseUrl}}/transactions/disburse", "host": ["{{baseUrl}}"], "path": ["transactions", "disburse"] },
+            "description": "Disburses funds from your balance to a single bank account or mobile money wallet."
+          }
+        },
+        {
+          "name": "Request a bulk payout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"batch_reference\": \"batch-001\",\n  \"currency\": \"NGN\",\n  \"merchant_bears_cost\": false,\n  \"payouts\": [ {}, {} ]\n}" },
+            "url": { "raw": "{{baseUrl}}/transactions/disburse/bulk", "host": ["{{baseUrl}}"], "path": ["transactions", "disburse", "bulk"] },
+            "description": "Disburses to multiple destinations in one batch (minimum 2 payouts)."
+          }
+        },
+        {
+          "name": "Request a remittance payout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"reference\": \"rem-ref-001\",\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"destination\": {}\n}" },
+            "url": { "raw": "{{baseUrl}}/transactions/disburse/remittance", "host": ["{{baseUrl}}"], "path": ["transactions", "disburse", "remittance"] },
+            "description": "Disburses a cross-border remittance payout."
+          }
+        },
+        {
+          "name": "Fetch payout history",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/payouts?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["payouts"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "20" }] },
+            "description": "Retrieves all payout transactions from your account (secret key auth)."
+          }
+        },
+        {
+          "name": "Check payout availability",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/payouts/availability", "host": ["{{baseUrl}}"], "path": ["payouts", "availability"] },
+            "description": "Returns whether payouts are currently available for a destination."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Virtual Bank Accounts",
+      "item": [
+        {
+          "name": "Create a virtual bank account",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"account_name\": \"John Doe\",\n  \"account_reference\": \"vba-ref-001\",\n  \"permanent\": true,\n  \"bank_code\": \"035\",\n  \"customer\": { \"name\": \"John Doe\" },\n  \"kyc\": { \"bvn\": \"00000000000\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/virtual-bank-account", "host": ["{{baseUrl}}"], "path": ["virtual-bank-account"] },
+            "description": "Creates a dedicated NGN or USD virtual bank account tied to a customer."
+          }
+        },
+        {
+          "name": "Retrieve a virtual bank account",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/virtual-bank-account/:accountReference", "host": ["{{baseUrl}}"], "path": ["virtual-bank-account", ":accountReference"], "variable": [{ "key": "accountReference", "value": "" }] },
+            "description": "Retrieves a virtual bank account by its account reference."
+          }
+        },
+        {
+          "name": "Fetch virtual bank account transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/virtual-bank-account/transactions?account_number=0000000000", "host": ["{{baseUrl}}"], "path": ["virtual-bank-account", "transactions"], "query": [{ "key": "account_number", "value": "0000000000" }] },
+            "description": "Retrieves the transactions that funded a virtual bank account."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Balances",
+      "item": [
+        {
+          "name": "Retrieve balances",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/balances", "host": ["{{baseUrl}}"], "path": ["balances"] },
+            "description": "Returns available and pending balances across supported currencies (secret key auth)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Refunds",
+      "item": [
+        {
+          "name": "Initiate a refund",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"reference\": \"refund-ref-001\",\n  \"transaction_reference\": \"KPY-...\",\n  \"reason\": \"Customer request\"\n}" },
+            "url": { "raw": "{{baseUrl}}/refunds/initiate", "host": ["{{baseUrl}}"], "path": ["refunds", "initiate"] },
+            "description": "Initiates a full or partial refund for a completed pay-in transaction."
+          }
+        },
+        {
+          "name": "Retrieve a refund",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/refunds/:reference", "host": ["{{baseUrl}}"], "path": ["refunds", ":reference"], "variable": [{ "key": "reference", "value": "" }] },
+            "description": "Retrieves the details of a refund by its reference."
+          }
+        },
+        {
+          "name": "List refunds",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/refunds?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["refunds"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "20" }] },
+            "description": "Lists refunds within a specified time period."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Currency Conversion",
+      "item": [
+        {
+          "name": "Get exchange rate",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"from_currency\": \"USD\",\n  \"to_currency\": \"NGN\",\n  \"amount\": 100\n}" },
+            "url": { "raw": "{{baseUrl}}/conversions/rates", "host": ["{{baseUrl}}"], "path": ["conversions", "rates"] },
+            "description": "Returns the latest exchange rate for a currency pair and amount."
+          }
+        },
+        {
+          "name": "Initiate a currency conversion",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"reference\": \"conv-ref-001\",\n  \"from_currency\": \"USD\",\n  \"to_currency\": \"NGN\",\n  \"amount\": 100\n}" },
+            "url": { "raw": "{{baseUrl}}/conversions", "host": ["{{baseUrl}}"], "path": ["conversions"] },
+            "description": "Converts funds between your multi-currency balances at the quoted rate."
+          }
+        },
+        {
+          "name": "Retrieve a conversion",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/conversions/:reference", "host": ["{{baseUrl}}"], "path": ["conversions", ":reference"], "variable": [{ "key": "reference", "value": "" }] },
+            "description": "Retrieves a currency conversion transaction by its reference."
+          }
+        },
+        {
+          "name": "List conversion history",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/conversions?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["conversions"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "20" }] },
+            "description": "Retrieves currency conversion transactions within a given period."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Misc",
+      "item": [
+        {
+          "name": "List banks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/misc/banks?countryCode=NG", "host": ["{{baseUrl}}"], "path": ["misc", "banks"], "query": [{ "key": "countryCode", "value": "NG" }] },
+            "description": "Lists supported banks and bank codes for a country."
+          }
+        },
+        {
+          "name": "Resolve a bank account",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"bank\": \"044\",\n  \"account\": \"0000000000\",\n  \"currency\": \"NGN\"\n}" },
+            "url": { "raw": "{{baseUrl}}/misc/banks/resolve", "host": ["{{baseUrl}}"], "path": ["misc", "banks", "resolve"] },
+            "description": "Verifies a destination bank account and returns the resolved account holder name."
+          }
+        },
+        {
+          "name": "List mobile money operators",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/misc/mobile-money?countryCode=KE", "host": ["{{baseUrl}}"], "path": ["misc", "mobile-money"], "query": [{ "key": "countryCode", "value": "KE" }] },
+            "description": "Lists supported mobile money operators and slugs for a country."
+          }
+        },
+        {
+          "name": "Resolve a mobile money number",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"mobile_money\": { \"number\": \"254700000000\" },\n  \"currency\": \"KES\"\n}" },
+            "url": { "raw": "{{baseUrl}}/misc/mobile-money/resolve", "host": ["{{baseUrl}}"], "path": ["misc", "mobile-money", "resolve"] },
+            "description": "Verifies a mobile money account and returns the resolved holder name."
+          }
+        },
+        {
+          "name": "Get payout payment purposes by country",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/misc/payout-payment-purpose-by-country-code/:countryCode", "host": ["{{baseUrl}}"], "path": ["misc", "payout-payment-purpose-by-country-code", ":countryCode"], "variable": [{ "key": "countryCode", "value": "US" }] },
+            "description": "Returns accepted payout payment-purpose values for a country."
+          }
+        },
+        {
+          "name": "Get supported payout countries by currency",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/misc/payout-countries-by-currency-code/:currencyCode", "host": ["{{baseUrl}}"], "path": ["misc", "payout-countries-by-currency-code", ":currencyCode"], "variable": [{ "key": "currencyCode", "value": "USD" }] },
+            "description": "Returns countries with supported banks under a given currency."
+          }
+        }
+      ]
+    }
+  ]
+}
