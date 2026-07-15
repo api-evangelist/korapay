@@ -186,6 +186,8 @@ apis:
     look up payout payment purposes and supported payout countries by currency
     before initiating a payout.
 common:
+- type: AgenticAccess
+  url: agentic-access/korapay-agentic-access.yml
 - type: DomainSecurity
   url: security/korapay-domain-security.yml
 - type: Authentication
