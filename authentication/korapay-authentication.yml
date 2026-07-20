@@ -10,7 +10,7 @@ schemes:
 - name: secretKeyAuth
   type: http
   scheme: bearer
-  description: 'Secret API key (sk_...) passed as `Authorization: Bearer sk_YOUR_SECRET_KEY`.
+  description: 'Secret API key (sk_...) passed as `Authorization: Bearer [example key]`.
     Required for server-side and financial operations - payouts, balances, virtual
     bank accounts, refunds, conversions, and charge verification. Keep confidential;
     never expose in client-side code. Test and Live modes use different secret keys.'
