@@ -1,0 +1,409 @@
+openapi: 3.0.3
+info:
+  title: Kora (Korapay) Merchant Balances Charges API
+  description: 'The Kora merchant REST API for pan-African payments. It supports pay-ins (card, bank transfer, mobile money, pay-with-bank), payouts (single, bulk, remittance), NGN and USD virtual bank accounts, balances, refunds, multi-currency conversion, and payout utilities (bank / mobile-money lookups and account resolution). All requests are authenticated with API keys - a public key for client-side charge initiation and a secret key (Bearer) for server-side and financial operations - and each account has separate Test and Live mode keys. Card charge payloads must be AES-256 encrypted with your encryption key. Webhook notifications carry an `x-korapay-signature` header that is an HMAC SHA-256 of the response `data` object signed with your secret key.
+
+    This document is a representative, grounded subset of the public Kora API. Request and response schemas are simplified; consult the Kora developer documentation for the authoritative field-level contract. Endpoints are confirmed against Kora''s published documentation except where a description notes an inferred path.'
+  version: '1.0'
+  contact:
+    name: Kora Developer Support
+    url: https://developers.korapay.com
+    email: support@korapay.com
+servers:
+- url: https://api.korapay.com/merchant/api/v1
+  description: Kora merchant API (Test and Live selected by the API key used)
+security:
+- secretKeyAuth: []
+tags:
+- name: Charges
+  description: Pay-ins - card, bank transfer, mobile money, and pay-with-bank.
+paths:
+  /charges/initialize:
+    post:
+      operationId: initializeCharge
+      tags:
+      - Charges
+      summary: Initialize a charge
+      description: Initializes a checkout charge and returns a hosted checkout URL / reference. Typically called with your public key from the client side.
+      security:
+      - publicKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitializeChargeInput'
+      responses:
+        '200':
+          description: The initialized charge.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charges/card:
+    post:
+      operationId: chargeCard
+      tags:
+      - Charges
+      summary: Charge a card
+      description: Charges a card. The card and payment details must be AES-256 encrypted with your encryption key and submitted as a single `charge_data` string. The response `status` (success, processing, or failed) and, when processing, the returned `auth_model` determine the next authorization step (PIN, OTP, AVS/address, or phone). Card payments require the feature to be enabled on your account and PCI DSS Level 1 certification.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptedChargeInput'
+      responses:
+        '200':
+          description: The card charge result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charges/card/authorize:
+    post:
+      operationId: authorizeCardCharge
+      tags:
+      - Charges
+      summary: Authorize a card charge
+      description: Completes a processing card charge by supplying the authorization the card requires (PIN, OTP, AVS/address, or phone), together with the transaction reference. NOTE - the exact path of this authorization endpoint is inferred by convention; Kora's documentation links to a Postman entry rather than printing the literal path. Verify before use.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardAuthorizationInput'
+      responses:
+        '200':
+          description: The authorization result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charges/mobile-money:
+    post:
+      operationId: chargeMobileMoney
+      tags:
+      - Charges
+      summary: Charge a mobile money wallet
+      description: Charges a customer's mobile money wallet. Available in Kenya (KES), Ghana (GHS), Cameroon (XAF), Cote d'Ivoire (XOF), Egypt (EGP), and Tanzania (TZS). The response `auth_model` (OTP, STK_PROMPT, or REDIRECT) indicates the action required to complete the transaction.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MobileMoneyChargeInput'
+      responses:
+        '200':
+          description: The mobile money charge result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charges/mobile-money/authorize:
+    post:
+      operationId: authorizeMobileMoneyCharge
+      tags:
+      - Charges
+      summary: Authorize a mobile money charge
+      description: Authorizes a mobile money charge whose `auth_model` was OTP by submitting the OTP collected from the customer along with the transaction reference. The response indicates the next required action.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MobileMoneyAuthorizationInput'
+      responses:
+        '200':
+          description: The authorization result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charge/pay-with-bank:
+    post:
+      operationId: chargePayWithBank
+      tags:
+      - Charges
+      summary: Charge with Pay with Bank
+      description: Initiates a Pay with Bank charge and returns a redirect URL used to complete the payment. Supports ZAR Instant EFT and NGN direct-debit style flows (currently Opay and Palmpay for NGN).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayWithBankInput'
+      responses:
+        '200':
+          description: The pay-with-bank charge with a redirect URL.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charge/pay-with-bank/banks:
+    get:
+      operationId: listPayWithBankBanks
+      tags:
+      - Charges
+      summary: List Pay with Bank banks
+      description: Retrieves the list of banks supported for Pay with Bank (Instant EFT).
+      responses:
+        '200':
+          description: A list of supported banks.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /charges/{reference}:
+    parameters:
+    - $ref: '#/components/parameters/Reference'
+    get:
+      operationId: verifyCharge
+      tags:
+      - Charges
+      summary: Verify / query a charge
+      description: Retrieves the current status and details of a charge by its payment reference. Always verify a charge server-side before delivering value.
+      responses:
+        '200':
+          description: The charge status and details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    CardAuthorizationInput:
+      type: object
+      required:
+      - transaction_reference
+      - authorization
+      properties:
+        transaction_reference:
+          type: string
+        authorization:
+          type: object
+          description: The authorization payload - pin, otp, avs/address, or phone.
+          additionalProperties: true
+    MobileMoneyChargeInput:
+      type: object
+      required:
+      - reference
+      - amount
+      - currency
+      - mobile_money
+      - customer
+      properties:
+        reference:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+          example: KES
+        mobile_money:
+          type: object
+          properties:
+            number:
+              type: string
+              example: '254700000000'
+        notification_url:
+          type: string
+          format: uri
+        merchant_bears_cost:
+          type: boolean
+          default: false
+        narration:
+          type: string
+        customer:
+          $ref: '#/components/schemas/Customer'
+    ChargeResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            reference:
+              type: string
+            transaction_reference:
+              type: string
+            status:
+              type: string
+              enum:
+              - success
+              - processing
+              - failed
+              - pending
+            auth_model:
+              type: string
+              description: OTP, PIN, STK_PROMPT, REDIRECT, AVS, PHONE, etc.
+            amount:
+              type: number
+            currency:
+              type: string
+            checkout_url:
+              type: string
+              format: uri
+            redirect_url:
+              type: string
+              format: uri
+          additionalProperties: true
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+    Customer:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+    InitializeChargeInput:
+      type: object
+      required:
+      - reference
+      - amount
+      - currency
+      - customer
+      properties:
+        reference:
+          type: string
+          description: Unique merchant reference for the transaction.
+        amount:
+          type: number
+        currency:
+          type: string
+          example: NGN
+        redirect_url:
+          type: string
+          format: uri
+        notification_url:
+          type: string
+          format: uri
+        narration:
+          type: string
+        customer:
+          $ref: '#/components/schemas/Customer'
+        metadata:
+          type: object
+          additionalProperties: true
+    MobileMoneyAuthorizationInput:
+      type: object
+      required:
+      - transaction_reference
+      - authorization
+      properties:
+        transaction_reference:
+          type: string
+        authorization:
+          type: object
+          properties:
+            otp:
+              type: string
+    BankList:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              code:
+                type: string
+            additionalProperties: true
+    EncryptedChargeInput:
+      type: object
+      required:
+      - charge_data
+      properties:
+        charge_data:
+          type: string
+          description: The card charge payload (reference, card, amount, currency, customer, redirect_url, metadata) AES-256 encrypted with your encryption key.
+    PayWithBankInput:
+      type: object
+      required:
+      - reference
+      - amount
+      - currency
+      - customer
+      properties:
+        reference:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+          example: ZAR
+        redirect_url:
+          type: string
+          format: uri
+        notification_url:
+          type: string
+          format: uri
+        customer:
+          $ref: '#/components/schemas/Customer'
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    Reference:
+      name: reference
+      in: path
+      required: true
+      description: The transaction / payment reference.
+      schema:
+        type: string
+  securitySchemes:
+    secretKeyAuth:
+      type: http
+      scheme: bearer
+      description: 'Secret API key passed as `Authorization: Bearer sk_...`. Required for server-side and financial operations (payouts, balances, virtual bank accounts, refunds, conversions, charge verification). Test and Live modes use different keys.'
+    publicKeyAuth:
+      type: http
+      scheme: bearer
+      description: Public API key (`pk_...`) used from client-side code to initiate charges. Cannot access financial data.

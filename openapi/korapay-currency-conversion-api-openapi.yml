@@ -1,0 +1,217 @@
+openapi: 3.0.3
+info:
+  title: Kora (Korapay) Merchant Balances Currency Conversion API
+  description: 'The Kora merchant REST API for pan-African payments. It supports pay-ins (card, bank transfer, mobile money, pay-with-bank), payouts (single, bulk, remittance), NGN and USD virtual bank accounts, balances, refunds, multi-currency conversion, and payout utilities (bank / mobile-money lookups and account resolution). All requests are authenticated with API keys - a public key for client-side charge initiation and a secret key (Bearer) for server-side and financial operations - and each account has separate Test and Live mode keys. Card charge payloads must be AES-256 encrypted with your encryption key. Webhook notifications carry an `x-korapay-signature` header that is an HMAC SHA-256 of the response `data` object signed with your secret key.
+
+    This document is a representative, grounded subset of the public Kora API. Request and response schemas are simplified; consult the Kora developer documentation for the authoritative field-level contract. Endpoints are confirmed against Kora''s published documentation except where a description notes an inferred path.'
+  version: '1.0'
+  contact:
+    name: Kora Developer Support
+    url: https://developers.korapay.com
+    email: support@korapay.com
+servers:
+- url: https://api.korapay.com/merchant/api/v1
+  description: Kora merchant API (Test and Live selected by the API key used)
+security:
+- secretKeyAuth: []
+tags:
+- name: Currency Conversion
+  description: Exchange rates and multi-currency conversions.
+paths:
+  /conversions/rates:
+    post:
+      operationId: getExchangeRate
+      tags:
+      - Currency Conversion
+      summary: Get exchange rate
+      description: Returns the latest exchange rate for a currency pair and amount.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRateInput'
+      responses:
+        '200':
+          description: The exchange rate quote.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /conversions:
+    post:
+      operationId: initiateConversion
+      tags:
+      - Currency Conversion
+      summary: Initiate a currency conversion
+      description: Converts funds between your multi-currency balances at the quoted rate.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversionInput'
+      responses:
+        '200':
+          description: The initiated conversion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversionResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      operationId: listConversions
+      tags:
+      - Currency Conversion
+      summary: List conversion history
+      description: Retrieves currency conversion transactions within a given period.
+      parameters:
+      - $ref: '#/components/parameters/StartDate'
+      - $ref: '#/components/parameters/EndDate'
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A list of conversions.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /conversions/{reference}:
+    parameters:
+    - $ref: '#/components/parameters/Reference'
+    get:
+      operationId: getConversion
+      tags:
+      - Currency Conversion
+      summary: Retrieve a conversion
+      description: Retrieves a currency conversion transaction by its reference.
+      responses:
+        '200':
+          description: The conversion details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversionResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    ExchangeRateInput:
+      type: object
+      required:
+      - from_currency
+      - to_currency
+      - amount
+      properties:
+        from_currency:
+          type: string
+        to_currency:
+          type: string
+        amount:
+          type: number
+    ConversionResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+    ConversionInput:
+      type: object
+      required:
+      - reference
+      - from_currency
+      - to_currency
+      - amount
+      properties:
+        reference:
+          type: string
+        from_currency:
+          type: string
+        to_currency:
+          type: string
+        amount:
+          type: number
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+  parameters:
+    Page:
+      name: page
+      in: query
+      required: false
+      description: Page number for pagination.
+      schema:
+        type: integer
+    StartDate:
+      name: start_date
+      in: query
+      required: false
+      description: Start of the date range (ISO 8601).
+      schema:
+        type: string
+        format: date
+    Reference:
+      name: reference
+      in: path
+      required: true
+      description: The transaction / payment reference.
+      schema:
+        type: string
+    EndDate:
+      name: end_date
+      in: query
+      required: false
+      description: End of the date range (ISO 8601).
+      schema:
+        type: string
+        format: date
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Number of records per page.
+      schema:
+        type: integer
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    secretKeyAuth:
+      type: http
+      scheme: bearer
+      description: 'Secret API key passed as `Authorization: Bearer sk_...`. Required for server-side and financial operations (payouts, balances, virtual bank accounts, refunds, conversions, charge verification). Test and Live modes use different keys.'
+    publicKeyAuth:
+      type: http
+      scheme: bearer
+      description: Public API key (`pk_...`) used from client-side code to initiate charges. Cannot access financial data.

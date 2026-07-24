@@ -1,0 +1,279 @@
+openapi: 3.0.3
+info:
+  title: Kora (Korapay) Merchant Balances Payouts API
+  description: 'The Kora merchant REST API for pan-African payments. It supports pay-ins (card, bank transfer, mobile money, pay-with-bank), payouts (single, bulk, remittance), NGN and USD virtual bank accounts, balances, refunds, multi-currency conversion, and payout utilities (bank / mobile-money lookups and account resolution). All requests are authenticated with API keys - a public key for client-side charge initiation and a secret key (Bearer) for server-side and financial operations - and each account has separate Test and Live mode keys. Card charge payloads must be AES-256 encrypted with your encryption key. Webhook notifications carry an `x-korapay-signature` header that is an HMAC SHA-256 of the response `data` object signed with your secret key.
+
+    This document is a representative, grounded subset of the public Kora API. Request and response schemas are simplified; consult the Kora developer documentation for the authoritative field-level contract. Endpoints are confirmed against Kora''s published documentation except where a description notes an inferred path.'
+  version: '1.0'
+  contact:
+    name: Kora Developer Support
+    url: https://developers.korapay.com
+    email: support@korapay.com
+servers:
+- url: https://api.korapay.com/merchant/api/v1
+  description: Kora merchant API (Test and Live selected by the API key used)
+security:
+- secretKeyAuth: []
+tags:
+- name: Payouts
+  description: Disbursements to bank accounts and mobile money wallets.
+paths:
+  /transactions/disburse:
+    post:
+      operationId: createPayout
+      tags:
+      - Payouts
+      summary: Request a single payout
+      description: Disburses funds from your Kora balance to a single bank account or mobile money wallet. Kora notifies your application via webhook when the payout completes.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayoutInput'
+      responses:
+        '200':
+          description: The initiated payout.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /transactions/disburse/bulk:
+    post:
+      operationId: createBulkPayout
+      tags:
+      - Payouts
+      summary: Request a bulk payout
+      description: Disburses to multiple destinations in a single batch (minimum 2 payouts). Supports NGN and ZAR bank accounts and KES and GHS mobile money. A webhook is sent after each individual payout in the batch completes.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkPayoutInput'
+      responses:
+        '200':
+          description: The initiated bulk payout batch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /transactions/disburse/remittance:
+    post:
+      operationId: createRemittancePayout
+      tags:
+      - Payouts
+      summary: Request a remittance payout
+      description: Disburses a cross-border remittance payout to a supported destination.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayoutInput'
+      responses:
+        '200':
+          description: The initiated remittance payout.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /payouts:
+    get:
+      operationId: listPayouts
+      tags:
+      - Payouts
+      summary: Fetch payout history
+      description: Retrieves all payout transactions made from your Kora account. Accepts your secret key as the authorization header and supports date-range and pagination query parameters.
+      parameters:
+      - $ref: '#/components/parameters/StartDate'
+      - $ref: '#/components/parameters/EndDate'
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A list of payout transactions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayoutList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /payouts/availability:
+    get:
+      operationId: getPayoutAvailability
+      tags:
+      - Payouts
+      summary: Check payout availability
+      description: Returns whether payouts are currently available for a destination.
+      responses:
+        '200':
+          description: Payout availability status.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    PayoutList:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    PayoutInput:
+      type: object
+      required:
+      - reference
+      - amount
+      - currency
+      - destination
+      properties:
+        reference:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+          example: NGN
+        merchant_bears_cost:
+          type: boolean
+          default: false
+        narration:
+          type: string
+        destination:
+          type: object
+          description: The payout destination - bank account or mobile money details.
+          properties:
+            type:
+              type: string
+              enum:
+              - bank_account
+              - mobile_money
+            amount:
+              type: number
+            currency:
+              type: string
+            bank_account:
+              type: object
+              properties:
+                bank:
+                  type: string
+                account:
+                  type: string
+            customer:
+              $ref: '#/components/schemas/Customer'
+          additionalProperties: true
+    Customer:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+    BulkPayoutInput:
+      type: object
+      required:
+      - batch_reference
+      - currency
+      - payouts
+      properties:
+        batch_reference:
+          type: string
+          description: Unique reference for the batch (5-50 characters).
+        description:
+          type: string
+        merchant_bears_cost:
+          type: boolean
+          default: false
+        currency:
+          type: string
+          example: NGN
+        payouts:
+          type: array
+          description: Between 2 and the batch maximum individual payouts.
+          items:
+            $ref: '#/components/schemas/PayoutInput'
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+    PayoutResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+  parameters:
+    Page:
+      name: page
+      in: query
+      required: false
+      description: Page number for pagination.
+      schema:
+        type: integer
+    StartDate:
+      name: start_date
+      in: query
+      required: false
+      description: Start of the date range (ISO 8601).
+      schema:
+        type: string
+        format: date
+    EndDate:
+      name: end_date
+      in: query
+      required: false
+      description: End of the date range (ISO 8601).
+      schema:
+        type: string
+        format: date
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Number of records per page.
+      schema:
+        type: integer
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    secretKeyAuth:
+      type: http
+      scheme: bearer
+      description: 'Secret API key passed as `Authorization: Bearer sk_...`. Required for server-side and financial operations (payouts, balances, virtual bank accounts, refunds, conversions, charge verification). Test and Live modes use different keys.'
+    publicKeyAuth:
+      type: http
+      scheme: bearer
+      description: Public API key (`pk_...`) used from client-side code to initiate charges. Cannot access financial data.

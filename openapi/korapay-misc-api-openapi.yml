@@ -1,0 +1,225 @@
+openapi: 3.0.3
+info:
+  title: Kora (Korapay) Merchant Balances Misc API
+  description: 'The Kora merchant REST API for pan-African payments. It supports pay-ins (card, bank transfer, mobile money, pay-with-bank), payouts (single, bulk, remittance), NGN and USD virtual bank accounts, balances, refunds, multi-currency conversion, and payout utilities (bank / mobile-money lookups and account resolution). All requests are authenticated with API keys - a public key for client-side charge initiation and a secret key (Bearer) for server-side and financial operations - and each account has separate Test and Live mode keys. Card charge payloads must be AES-256 encrypted with your encryption key. Webhook notifications carry an `x-korapay-signature` header that is an HMAC SHA-256 of the response `data` object signed with your secret key.
+
+    This document is a representative, grounded subset of the public Kora API. Request and response schemas are simplified; consult the Kora developer documentation for the authoritative field-level contract. Endpoints are confirmed against Kora''s published documentation except where a description notes an inferred path.'
+  version: '1.0'
+  contact:
+    name: Kora Developer Support
+    url: https://developers.korapay.com
+    email: support@korapay.com
+servers:
+- url: https://api.korapay.com/merchant/api/v1
+  description: Kora merchant API (Test and Live selected by the API key used)
+security:
+- secretKeyAuth: []
+tags:
+- name: Misc
+  description: Bank / mobile-money lookups, account resolution, and payout utilities.
+paths:
+  /misc/banks:
+    get:
+      operationId: listBanks
+      tags:
+      - Misc
+      summary: List banks
+      description: Lists supported banks and their bank codes for a country.
+      parameters:
+      - name: countryCode
+        in: query
+        required: true
+        description: ISO country code, e.g. NG, KE, ZA, GH.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of banks.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /misc/banks/resolve:
+    post:
+      operationId: resolveBankAccount
+      tags:
+      - Misc
+      summary: Resolve a bank account
+      description: Verifies a destination bank account and returns the resolved account holder name, given a bank code and account number.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResolveBankInput'
+      responses:
+        '200':
+          description: The resolved account details.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /misc/mobile-money:
+    get:
+      operationId: listMobileMoneyOperators
+      tags:
+      - Misc
+      summary: List mobile money operators
+      description: Lists supported mobile money operators (and their slugs) for a country.
+      parameters:
+      - name: countryCode
+        in: query
+        required: true
+        description: ISO country code, e.g. KE, GH.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of mobile money operators.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /misc/mobile-money/resolve:
+    post:
+      operationId: resolveMobileMoney
+      tags:
+      - Misc
+      summary: Resolve a mobile money number
+      description: Verifies a mobile money account and returns the resolved holder name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: The resolved mobile money details.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /misc/payout-payment-purpose-by-country-code/{countryCode}:
+    parameters:
+    - name: countryCode
+      in: path
+      required: true
+      description: ISO country code of the payout destination.
+      schema:
+        type: string
+    get:
+      operationId: getPayoutPaymentPurpose
+      tags:
+      - Misc
+      summary: Get payout payment purposes by country
+      description: Returns the accepted payout payment-purpose values for a country. Some destination countries require a payment purpose on a payout request.
+      responses:
+        '200':
+          description: The accepted payment purposes.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          description: Unsupported country code.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /misc/payout-countries-by-currency-code/{currencyCode}:
+    parameters:
+    - name: currencyCode
+      in: path
+      required: true
+      description: ISO currency code, e.g. USD, NGN.
+      schema:
+        type: string
+    get:
+      operationId: getPayoutCountriesByCurrency
+      tags:
+      - Misc
+      summary: Get supported payout countries by currency
+      description: Returns the countries for which Kora has supported banks under a given currency, to confirm coverage before initiating a payout.
+      responses:
+        '200':
+          description: The supported countries.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          description: Unsupported currency code.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ResolveBankInput:
+      type: object
+      required:
+      - bank
+      - account
+      properties:
+        bank:
+          type: string
+          description: The bank code.
+        account:
+          type: string
+          description: The account number to resolve.
+        currency:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+    BankList:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              code:
+                type: string
+            additionalProperties: true
+  securitySchemes:
+    secretKeyAuth:
+      type: http
+      scheme: bearer
+      description: 'Secret API key passed as `Authorization: Bearer sk_...`. Required for server-side and financial operations (payouts, balances, virtual bank accounts, refunds, conversions, charge verification). Test and Live modes use different keys.'
+    publicKeyAuth:
+      type: http
+      scheme: bearer
+      description: Public API key (`pk_...`) used from client-side code to initiate charges. Cannot access financial data.

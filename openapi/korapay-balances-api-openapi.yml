@@ -1,0 +1,83 @@
+openapi: 3.0.3
+info:
+  title: Kora (Korapay) Merchant Balances API
+  description: 'The Kora merchant REST API for pan-African payments. It supports pay-ins (card, bank transfer, mobile money, pay-with-bank), payouts (single, bulk, remittance), NGN and USD virtual bank accounts, balances, refunds, multi-currency conversion, and payout utilities (bank / mobile-money lookups and account resolution). All requests are authenticated with API keys - a public key for client-side charge initiation and a secret key (Bearer) for server-side and financial operations - and each account has separate Test and Live mode keys. Card charge payloads must be AES-256 encrypted with your encryption key. Webhook notifications carry an `x-korapay-signature` header that is an HMAC SHA-256 of the response `data` object signed with your secret key.
+
+    This document is a representative, grounded subset of the public Kora API. Request and response schemas are simplified; consult the Kora developer documentation for the authoritative field-level contract. Endpoints are confirmed against Kora''s published documentation except where a description notes an inferred path.'
+  version: '1.0'
+  contact:
+    name: Kora Developer Support
+    url: https://developers.korapay.com
+    email: support@korapay.com
+servers:
+- url: https://api.korapay.com/merchant/api/v1
+  description: Kora merchant API (Test and Live selected by the API key used)
+security:
+- secretKeyAuth: []
+tags:
+- name: Balances
+  description: Real-time available and pending balances per currency.
+paths:
+  /balances:
+    get:
+      operationId: getBalances
+      tags:
+      - Balances
+      summary: Retrieve balances
+      description: Returns available and pending balances across all supported currencies (NGN by default, plus USD, GHS, KES, XAF, XOF, ZAR on multi-currency accounts). Requires secret key authentication.
+      responses:
+        '200':
+          description: Balances per currency.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalancesResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    BalancesResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          description: Map of currency code to balance object.
+          additionalProperties:
+            type: object
+            properties:
+              pending_balance:
+                type: number
+              available_balance:
+                type: number
+              issuing_balance:
+                type: number
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+  securitySchemes:
+    secretKeyAuth:
+      type: http
+      scheme: bearer
+      description: 'Secret API key passed as `Authorization: Bearer sk_...`. Required for server-side and financial operations (payouts, balances, virtual bank accounts, refunds, conversions, charge verification). Test and Live modes use different keys.'
+    publicKeyAuth:
+      type: http
+      scheme: bearer
+      description: Public API key (`pk_...`) used from client-side code to initiate charges. Cannot access financial data.
