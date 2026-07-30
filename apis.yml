@@ -10,7 +10,20 @@ description: Kora (formerly Korapay) is a pan-African payments infrastructure co
   remittance payouts; NGN and USD virtual bank accounts; balances; refunds; and
   multi-currency conversion, with test and live modes authenticated by public and
   secret API keys and webhook events verified with an HMAC SHA-256 signature.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/korapay.png
 tags:
 - Payments
 - Payment Gateway
@@ -26,165 +39,258 @@ created: '2026-07-12'
 modified: '2026-07-12'
 specificationVersion: '0.19'
 apis:
-- aid: korapay:korapay-charges-api
-  name: Kora Charges API
-  tags:
-  - Collections
-  - Charges
-  - Cards
-  - Bank Transfer
-  - Mobile Money
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.korapay.com/docs/accept-payments
-  baseURL: https://api.korapay.com/merchant/api/v1
-  properties:
-  - url: https://developers.korapay.com/docs/accept-payments
-    type: Documentation
-  - url: https://developers.korapay.com/docs/accepting-card-payments-with-apis
-    type: APIReference
-  - url: openapi/korapay-openapi.yml
-    type: OpenAPI
-  - url: collections/korapay.postman_collection.json
-    type: PostmanCollection
-  - url: collections/korapay.opencollection.json
-    type: OpenCollection
-  description: Accept payments (pay-ins) from customers. Initialize a checkout charge,
-    charge cards (with encrypted card data and OTP/PIN/AVS/phone authorization),
-    charge mobile money wallets and authorize them, run pay-with-bank (Instant EFT /
-    direct debit) charges, and verify the final status of any charge by reference.
-- aid: korapay:korapay-payouts-api
-  name: Kora Payouts API
-  tags:
-  - Payouts
-  - Disbursements
-  - Transfers
-  - Bulk
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.korapay.com/docs/payout-via-api
-  baseURL: https://api.korapay.com/merchant/api/v1
-  properties:
-  - url: https://developers.korapay.com/docs/payout-via-api
-    type: Documentation
-  - url: https://developers.korapay.com/docs/bulk-payouts-via-api
-    type: APIReference
-  - url: openapi/korapay-openapi.yml
-    type: OpenAPI
-  - url: collections/korapay.postman_collection.json
-    type: PostmanCollection
-  - url: collections/korapay.opencollection.json
-    type: OpenCollection
-  description: Disburse funds from your Kora balance to bank accounts and mobile money
-    wallets. Send single payouts, bulk payouts (batches of 2+), and cross-border
-    remittance payouts, check payout availability, and fetch your payout history.
-- aid: korapay:korapay-virtual-bank-accounts-api
-  name: Kora Virtual Bank Accounts API
-  tags:
-  - Virtual Bank Account
-  - Collections
-  - Nigeria
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.korapay.com/docs/virtual-bank-accounts
-  baseURL: https://api.korapay.com/merchant/api/v1
-  properties:
-  - url: https://developers.korapay.com/docs/virtual-bank-accounts
-    type: Documentation
-  - url: https://developers.korapay.com/docs/virtual-bank-accounts-ngn
-    type: APIReference
-  - url: openapi/korapay-openapi.yml
-    type: OpenAPI
-  - url: collections/korapay.postman_collection.json
-    type: PostmanCollection
-  - url: collections/korapay.opencollection.json
-    type: OpenCollection
-  description: Create and manage dedicated NGN and USD virtual bank accounts (permanent
-    or temporary) tied to your customers, retrieve an account by its reference, and
-    fetch the transactions that funded a virtual bank account.
 - aid: korapay:korapay-balances-api
   name: Kora Balances API
-  tags:
-  - Balance
-  - Reporting
-  - Multi-Currency
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.korapay.com/docs/balance-api
+  description: Real-time available and pending balances per currency.
+  humanURL: https://developers.korapay.com/docs/accept-payments
   baseURL: https://api.korapay.com/merchant/api/v1
-  properties:
-  - url: https://developers.korapay.com/docs/balance-api
-    type: Documentation
-  - url: openapi/korapay-openapi.yml
-    type: OpenAPI
-  - url: collections/korapay.postman_collection.json
-    type: PostmanCollection
-  - url: collections/korapay.opencollection.json
-    type: OpenCollection
-  description: Retrieve real-time available and pending balances across all supported
-    currencies (NGN by default, plus USD, GHS, KES, XAF, XOF, ZAR for multi-currency
-    accounts). Requires secret key authentication.
-- aid: korapay:korapay-refunds-api
-  name: Kora Refunds API
   tags:
-  - Refunds
-  - Collections
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.korapay.com/docs/refunds-api
-  baseURL: https://api.korapay.com/merchant/api/v1
+  - Balances
   properties:
-  - url: https://developers.korapay.com/docs/refunds-api
-    type: Documentation
-  - url: openapi/korapay-openapi.yml
-    type: OpenAPI
-  - url: collections/korapay.postman_collection.json
-    type: PostmanCollection
-  - url: collections/korapay.opencollection.json
-    type: OpenCollection
-  description: Initiate a full or partial refund for a completed pay-in transaction,
-    retrieve the details of a single refund by reference, and list refunds within a
-    given time period.
+  - type: OpenAPI
+    url: openapi/korapay-balances-api-openapi.yml
+  - type: Documentation
+    url: https://developers.korapay.com/docs/accept-payments
+  - type: APIReference
+    url: https://developers.korapay.com/docs/accepting-card-payments-with-apis
+  - type: PostmanCollection
+    url: collections/korapay.postman_collection.json
+  - type: OpenCollection
+    url: collections/korapay.opencollection.json
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-via-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/bulk-payouts-via-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/virtual-bank-accounts
+  - type: APIReference
+    url: https://developers.korapay.com/docs/virtual-bank-accounts-ngn
+  - type: Documentation
+    url: https://developers.korapay.com/docs/balance-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/refunds-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/currency-conversion-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/exchange-rate-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-utilities
+- aid: korapay:korapay-charges-api
+  name: Kora Charges API
+  description: Pay-ins - card, bank transfer, mobile money, and pay-with-bank.
+  humanURL: https://developers.korapay.com/docs/accept-payments
+  baseURL: https://api.korapay.com/merchant/api/v1
+  tags:
+  - Charges
+  properties:
+  - type: OpenAPI
+    url: openapi/korapay-charges-api-openapi.yml
+  - type: Documentation
+    url: https://developers.korapay.com/docs/accept-payments
+  - type: APIReference
+    url: https://developers.korapay.com/docs/accepting-card-payments-with-apis
+  - type: PostmanCollection
+    url: collections/korapay.postman_collection.json
+  - type: OpenCollection
+    url: collections/korapay.opencollection.json
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-via-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/bulk-payouts-via-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/virtual-bank-accounts
+  - type: APIReference
+    url: https://developers.korapay.com/docs/virtual-bank-accounts-ngn
+  - type: Documentation
+    url: https://developers.korapay.com/docs/balance-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/refunds-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/currency-conversion-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/exchange-rate-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-utilities
 - aid: korapay:korapay-currency-conversion-api
   name: Kora Currency Conversion API
+  description: Exchange rates and multi-currency conversions.
+  humanURL: https://developers.korapay.com/docs/accept-payments
+  baseURL: https://api.korapay.com/merchant/api/v1
   tags:
   - Currency Conversion
-  - FX
-  - Multi-Currency
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.korapay.com/docs/currency-conversion-api
-  baseURL: https://api.korapay.com/merchant/api/v1
   properties:
-  - url: https://developers.korapay.com/docs/currency-conversion-api
-    type: Documentation
-  - url: https://developers.korapay.com/docs/exchange-rate-api
-    type: APIReference
-  - url: openapi/korapay-openapi.yml
-    type: OpenAPI
-  - url: collections/korapay.postman_collection.json
-    type: PostmanCollection
-  - url: collections/korapay.opencollection.json
-    type: OpenCollection
-  description: Get the latest exchange rate for a currency pair, initiate a currency
-    conversion between your multi-currency balances, retrieve a conversion by
-    reference, and list conversion history for a period.
-- aid: korapay:korapay-misc-utilities-api
-  name: Kora Misc Utilities API
+  - type: OpenAPI
+    url: openapi/korapay-currency-conversion-api-openapi.yml
+  - type: Documentation
+    url: https://developers.korapay.com/docs/accept-payments
+  - type: APIReference
+    url: https://developers.korapay.com/docs/accepting-card-payments-with-apis
+  - type: PostmanCollection
+    url: collections/korapay.postman_collection.json
+  - type: OpenCollection
+    url: collections/korapay.opencollection.json
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-via-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/bulk-payouts-via-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/virtual-bank-accounts
+  - type: APIReference
+    url: https://developers.korapay.com/docs/virtual-bank-accounts-ngn
+  - type: Documentation
+    url: https://developers.korapay.com/docs/balance-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/refunds-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/currency-conversion-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/exchange-rate-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-utilities
+- aid: korapay:korapay-misc-api
+  name: Kora Misc API
+  description: Bank / mobile-money lookups, account resolution, and payout utilities.
+  humanURL: https://developers.korapay.com/docs/accept-payments
+  baseURL: https://api.korapay.com/merchant/api/v1
   tags:
-  - Banks
-  - Account Resolution
-  - Utilities
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.korapay.com/docs/payout-utilities
-  baseURL: https://api.korapay.com/merchant/api/v1
+  - Misc
   properties:
-  - url: https://developers.korapay.com/docs/payout-utilities
-    type: Documentation
-  - url: openapi/korapay-openapi.yml
-    type: OpenAPI
-  - url: collections/korapay.postman_collection.json
-    type: PostmanCollection
-  - url: collections/korapay.opencollection.json
-    type: OpenCollection
-  description: Payout support utilities - list banks and mobile money operators by
-    country, resolve (verify) a destination bank account or mobile money number, and
-    look up payout payment purposes and supported payout countries by currency
-    before initiating a payout.
+  - type: OpenAPI
+    url: openapi/korapay-misc-api-openapi.yml
+  - type: Documentation
+    url: https://developers.korapay.com/docs/accept-payments
+  - type: APIReference
+    url: https://developers.korapay.com/docs/accepting-card-payments-with-apis
+  - type: PostmanCollection
+    url: collections/korapay.postman_collection.json
+  - type: OpenCollection
+    url: collections/korapay.opencollection.json
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-via-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/bulk-payouts-via-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/virtual-bank-accounts
+  - type: APIReference
+    url: https://developers.korapay.com/docs/virtual-bank-accounts-ngn
+  - type: Documentation
+    url: https://developers.korapay.com/docs/balance-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/refunds-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/currency-conversion-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/exchange-rate-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-utilities
+- aid: korapay:korapay-payouts-api
+  name: Kora Payouts API
+  description: Disbursements to bank accounts and mobile money wallets.
+  humanURL: https://developers.korapay.com/docs/accept-payments
+  baseURL: https://api.korapay.com/merchant/api/v1
+  tags:
+  - Payouts
+  properties:
+  - type: OpenAPI
+    url: openapi/korapay-payouts-api-openapi.yml
+  - type: Documentation
+    url: https://developers.korapay.com/docs/accept-payments
+  - type: APIReference
+    url: https://developers.korapay.com/docs/accepting-card-payments-with-apis
+  - type: PostmanCollection
+    url: collections/korapay.postman_collection.json
+  - type: OpenCollection
+    url: collections/korapay.opencollection.json
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-via-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/bulk-payouts-via-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/virtual-bank-accounts
+  - type: APIReference
+    url: https://developers.korapay.com/docs/virtual-bank-accounts-ngn
+  - type: Documentation
+    url: https://developers.korapay.com/docs/balance-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/refunds-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/currency-conversion-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/exchange-rate-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-utilities
+- aid: korapay:korapay-refunds-api
+  name: Kora Refunds API
+  description: Refunds for completed pay-in transactions.
+  humanURL: https://developers.korapay.com/docs/accept-payments
+  baseURL: https://api.korapay.com/merchant/api/v1
+  tags:
+  - Refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/korapay-refunds-api-openapi.yml
+  - type: Documentation
+    url: https://developers.korapay.com/docs/accept-payments
+  - type: APIReference
+    url: https://developers.korapay.com/docs/accepting-card-payments-with-apis
+  - type: PostmanCollection
+    url: collections/korapay.postman_collection.json
+  - type: OpenCollection
+    url: collections/korapay.opencollection.json
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-via-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/bulk-payouts-via-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/virtual-bank-accounts
+  - type: APIReference
+    url: https://developers.korapay.com/docs/virtual-bank-accounts-ngn
+  - type: Documentation
+    url: https://developers.korapay.com/docs/balance-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/refunds-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/currency-conversion-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/exchange-rate-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-utilities
+- aid: korapay:korapay-virtual-bank-accounts-api
+  name: Kora Virtual Bank Accounts API
+  description: Dedicated NGN and USD virtual bank accounts.
+  humanURL: https://developers.korapay.com/docs/accept-payments
+  baseURL: https://api.korapay.com/merchant/api/v1
+  tags:
+  - Virtual Bank Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/korapay-virtual-bank-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://developers.korapay.com/docs/accept-payments
+  - type: APIReference
+    url: https://developers.korapay.com/docs/accepting-card-payments-with-apis
+  - type: PostmanCollection
+    url: collections/korapay.postman_collection.json
+  - type: OpenCollection
+    url: collections/korapay.opencollection.json
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-via-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/bulk-payouts-via-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/virtual-bank-accounts
+  - type: APIReference
+    url: https://developers.korapay.com/docs/virtual-bank-accounts-ngn
+  - type: Documentation
+    url: https://developers.korapay.com/docs/balance-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/refunds-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/currency-conversion-api
+  - type: APIReference
+    url: https://developers.korapay.com/docs/exchange-rate-api
+  - type: Documentation
+    url: https://developers.korapay.com/docs/payout-utilities
 common:
 - type: AgenticAccess
   url: agentic-access/korapay-agentic-access.yml
