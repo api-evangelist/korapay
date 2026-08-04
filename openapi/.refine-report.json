@@ -1,0 +1,26 @@
+{
+  "provider": "korapay",
+  "sources": [
+    "korapay-balances-api-openapi.yml",
+    "korapay-charges-api-openapi.yml",
+    "korapay-currency-conversion-api-openapi.yml",
+    "korapay-misc-api-openapi.yml",
+    "korapay-payouts-api-openapi.yml",
+    "korapay-refunds-api-openapi.yml",
+    "korapay-virtual-bank-accounts-api-openapi.yml"
+  ],
+  "outputs": [
+    "korapay-balances-api-openapi.yml",
+    "korapay-charges-api-openapi.yml",
+    "korapay-currency-conversion-api-openapi.yml",
+    "korapay-misc-api-openapi.yml",
+    "korapay-payouts-api-openapi.yml",
+    "korapay-refunds-api-openapi.yml",
+    "korapay-virtual-bank-accounts-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
