@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Kora (Korapay) Merchant Balances Currency Conversion API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Currency Conversion",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get exchange rate",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/conversions/rates",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns the latest exchange rate for a currency pair and amount."
+        },
+        {
+          "info": {
+            "name": "List conversion history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/conversions",
+            "params": [
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start of the date range (ISO 8601)."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End of the date range (ISO 8601)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page."
+              }
+            ]
+          },
+          "docs": "Retrieves currency conversion transactions within a given period."
+        },
+        {
+          "info": {
+            "name": "Initiate a currency conversion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/conversions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Converts funds between your multi-currency balances at the quoted rate."
+        },
+        {
+          "info": {
+            "name": "Retrieve a conversion",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/conversions/:reference",
+            "params": [
+              {
+                "name": "reference",
+                "value": "",
+                "type": "path",
+                "description": "The transaction / payment reference."
+              }
+            ]
+          },
+          "docs": "Retrieves a currency conversion transaction by its reference."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

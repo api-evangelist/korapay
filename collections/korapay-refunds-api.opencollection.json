@@ -1,0 +1,95 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Kora (Korapay) Merchant Balances Refunds API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Refunds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate a refund",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/refunds/initiate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a full or partial refund for a completed pay-in transaction."
+        },
+        {
+          "info": {
+            "name": "Retrieve a refund",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/refunds/:reference",
+            "params": [
+              {
+                "name": "reference",
+                "value": "",
+                "type": "path",
+                "description": "The transaction / payment reference."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a refund by its reference."
+        },
+        {
+          "info": {
+            "name": "List refunds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/refunds",
+            "params": [
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start of the date range (ISO 8601)."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End of the date range (ISO 8601)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page."
+              }
+            ]
+          },
+          "docs": "Lists refunds within a specified time period."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

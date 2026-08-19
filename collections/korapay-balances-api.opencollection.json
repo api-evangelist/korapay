@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Kora (Korapay) Merchant Balances API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Balances",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve balances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/balances"
+          },
+          "docs": "Returns available and pending balances across all supported currencies (NGN by default, plus USD, GHS, KES, XAF, XOF, ZAR on multi-currency accounts). Requires secret key authentication."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

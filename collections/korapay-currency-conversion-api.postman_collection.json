@@ -1,0 +1,724 @@
+{
+  "item": [
+    {
+      "id": "a587082e-56ee-4fcb-bcf2-25785d14cd62",
+      "name": "Currency Conversion",
+      "description": {
+        "content": "Exchange rates and multi-currency conversions.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "cabe2cf8-cf89-48ab-bf67-b8a565b0dd97",
+          "name": "Get exchange rate",
+          "request": {
+            "name": "Get exchange rate",
+            "description": {
+              "content": "Returns the latest exchange rate for a currency pair and amount.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "conversions",
+                "rates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"from_currency\": \"<string>\",\n  \"to_currency\": \"<string>\",\n  \"amount\": \"<number>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d64d87bf-7dea-4307-92c0-1fba13071003",
+              "name": "The exchange rate quote.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversions",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"from_currency\": \"<string>\",\n  \"to_currency\": \"<string>\",\n  \"amount\": \"<number>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": 8929,\n  \"key_1\": false,\n  \"key_2\": 3070.73124395847\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "864fd2f9-c6f7-4186-8f79-8d16af11a86b",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversions",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"from_currency\": \"<string>\",\n  \"to_currency\": \"<string>\",\n  \"amount\": \"<number>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": 5153.197238781397,\n    \"key_2\": false,\n    \"key_3\": 3557\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cecc8d2a-8c2c-4bd1-bf82-9b3901a44d03",
+          "name": "Initiate a currency conversion",
+          "request": {
+            "name": "Initiate a currency conversion",
+            "description": {
+              "content": "Converts funds between your multi-currency balances at the quoted rate.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "conversions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reference\": \"<string>\",\n  \"from_currency\": \"<string>\",\n  \"to_currency\": \"<string>\",\n  \"amount\": \"<number>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b721aa42-3950-4978-bcbd-98d791a1ba1a",
+              "name": "The initiated conversion.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reference\": \"<string>\",\n  \"from_currency\": \"<string>\",\n  \"to_currency\": \"<string>\",\n  \"amount\": \"<number>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": 5153.197238781397,\n    \"key_2\": false,\n    \"key_3\": 3557\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "065220e3-04f5-4628-9bea-18d8de7bfefb",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reference\": \"<string>\",\n  \"from_currency\": \"<string>\",\n  \"to_currency\": \"<string>\",\n  \"amount\": \"<number>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": 5153.197238781397,\n    \"key_2\": false,\n    \"key_3\": 3557\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "73c0ec5f-814b-4fea-b629-d0fc3be8ecaf",
+          "name": "List conversion history",
+          "request": {
+            "name": "List conversion history",
+            "description": {
+              "content": "Retrieves currency conversion transactions within a given period.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "conversions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>",
+                  "description": "Start of the date range (ISO 8601)."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>",
+                  "description": "End of the date range (ISO 8601)."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Page number for pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of records per page."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fd3b59da-1c35-43eb-8dc3-026feff7189f",
+              "name": "A list of conversions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": 8929,\n  \"key_1\": false,\n  \"key_2\": 3070.73124395847\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "39e512c4-e5cc-47d4-919c-cf0d0e773467",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": 5153.197238781397,\n    \"key_2\": false,\n    \"key_3\": 3557\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2d9dcc82-dd4e-4ce3-a689-2318326afcd5",
+          "name": "Retrieve a conversion",
+          "request": {
+            "name": "Retrieve a conversion",
+            "description": {
+              "content": "Retrieves a currency conversion transaction by its reference.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "conversions",
+                ":reference"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "reference",
+                  "description": "(Required) The transaction / payment reference."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5fbf06b0-7eff-42ae-8231-70d4f7370765",
+              "name": "The conversion details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversions",
+                    ":reference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "reference",
+                      "description": "(Required) The transaction / payment reference."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": 5153.197238781397,\n    \"key_2\": false,\n    \"key_3\": 3557\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef3aaade-5a2c-4198-ac90-907abd119632",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversions",
+                    ":reference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "reference",
+                      "description": "(Required) The transaction / payment reference."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": 5153.197238781397,\n    \"key_2\": false,\n    \"key_3\": 3557\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bacefe6f-dcef-4c39-8b04-c0aa22a38b82",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "conversions",
+                    ":reference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "reference",
+                      "description": "(Required) The transaction / payment reference."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": 5153.197238781397,\n    \"key_2\": false,\n    \"key_3\": 3557\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.korapay.com/merchant/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "eaf20921-14db-4739-ba24-e1f93f82a13e",
+    "name": "Kora (Korapay) Merchant Balances Currency Conversion API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Kora merchant REST API for pan-African payments. It supports pay-ins (card, bank transfer, mobile money, pay-with-bank), payouts (single, bulk, remittance), NGN and USD virtual bank accounts, balances, refunds, multi-currency conversion, and payout utilities (bank / mobile-money lookups and account resolution). All requests are authenticated with API keys - a public key for client-side charge initiation and a secret key (Bearer) for server-side and financial operations - and each account has separate Test and Live mode keys. Card charge payloads must be AES-256 encrypted with your encryption key. Webhook notifications carry an `x-korapay-signature` header that is an HMAC SHA-256 of the response `data` object signed with your secret key.\nThis document is a representative, grounded subset of the public Kora API. Request and response schemas are simplified; consult the Kora developer documentation for the authoritative field-level contract. Endpoints are confirmed against Kora's published documentation except where a description notes an inferred path.\n\nContact Support:\n Name: Kora Developer Support\n Email: support@korapay.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Kora (Korapay) Merchant Balances Misc API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Misc",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List banks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/misc/banks",
+            "params": [
+              {
+                "name": "countryCode",
+                "value": "",
+                "type": "query",
+                "description": "ISO country code, e.g. NG, KE, ZA, GH."
+              }
+            ]
+          },
+          "docs": "Lists supported banks and their bank codes for a country."
+        },
+        {
+          "info": {
+            "name": "Resolve a bank account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/misc/banks/resolve",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Verifies a destination bank account and returns the resolved account holder name, given a bank code and account number."
+        },
+        {
+          "info": {
+            "name": "List mobile money operators",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/misc/mobile-money",
+            "params": [
+              {
+                "name": "countryCode",
+                "value": "",
+                "type": "query",
+                "description": "ISO country code, e.g. KE, GH."
+              }
+            ]
+          },
+          "docs": "Lists supported mobile money operators (and their slugs) for a country."
+        },
+        {
+          "info": {
+            "name": "Resolve a mobile money number",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/misc/mobile-money/resolve",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Verifies a mobile money account and returns the resolved holder name."
+        },
+        {
+          "info": {
+            "name": "Get payout payment purposes by country",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/misc/payout-payment-purpose-by-country-code/:countryCode",
+            "params": [
+              {
+                "name": "countryCode",
+                "value": "",
+                "type": "path",
+                "description": "ISO country code of the payout destination."
+              }
+            ]
+          },
+          "docs": "Returns the accepted payout payment-purpose values for a country. Some destination countries require a payment purpose on a payout request."
+        },
+        {
+          "info": {
+            "name": "Get supported payout countries by currency",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/misc/payout-countries-by-currency-code/:currencyCode",
+            "params": [
+              {
+                "name": "currencyCode",
+                "value": "",
+                "type": "path",
+                "description": "ISO currency code, e.g. USD, NGN."
+              }
+            ]
+          },
+          "docs": "Returns the countries for which Kora has supported banks under a given currency, to confirm coverage before initiating a payout."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

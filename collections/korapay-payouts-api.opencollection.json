@@ -1,0 +1,117 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Kora (Korapay) Merchant Balances Payouts API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payouts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request a single payout",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/transactions/disburse",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Disburses funds from your Kora balance to a single bank account or mobile money wallet. Kora notifies your application via webhook when the payout completes."
+        },
+        {
+          "info": {
+            "name": "Request a bulk payout",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/transactions/disburse/bulk",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Disburses to multiple destinations in a single batch (minimum 2 payouts). Supports NGN and ZAR bank accounts and KES and GHS mobile money. A webhook is sent after each individual payout in the batch completes."
+        },
+        {
+          "info": {
+            "name": "Request a remittance payout",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/transactions/disburse/remittance",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Disburses a cross-border remittance payout to a supported destination."
+        },
+        {
+          "info": {
+            "name": "Fetch payout history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/payouts",
+            "params": [
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start of the date range (ISO 8601)."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End of the date range (ISO 8601)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page."
+              }
+            ]
+          },
+          "docs": "Retrieves all payout transactions made from your Kora account. Accepts your secret key as the authorization header and supports date-range and pagination query parameters."
+        },
+        {
+          "info": {
+            "name": "Check payout availability",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/payouts/availability"
+          },
+          "docs": "Returns whether payouts are currently available for a destination."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

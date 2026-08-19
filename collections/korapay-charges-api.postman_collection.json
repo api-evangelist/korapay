@@ -1,0 +1,1300 @@
+{
+  "item": [
+    {
+      "id": "97a6c9d2-59c5-47c2-8e60-c69bcdc13b99",
+      "name": "Charges",
+      "description": {
+        "content": "Pay-ins - card, bank transfer, mobile money, and pay-with-bank.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5816df3e-bff5-45e3-ba80-50f1e00c6734",
+          "name": "Initialize a charge",
+          "request": {
+            "name": "Initialize a charge",
+            "description": {
+              "content": "Initializes a checkout charge and returns a hosted checkout URL / reference. Typically called with your public key from the client side.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "charges",
+                "initialize"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"<string>\",\n  \"customer\": {\n    \"name\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"redirect_url\": \"<uri>\",\n  \"notification_url\": \"<uri>\",\n  \"narration\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": 2982,\n    \"key_1\": false\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5aae0234-a9b6-4109-b28c-7ec335848eef",
+              "name": "The initialized charge.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    "initialize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"NGN\",\n  \"customer\": {\n    \"name\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"redirect_url\": \"<uri>\",\n  \"notification_url\": \"<uri>\",\n  \"narration\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"reference\": \"string\",\n    \"transaction_reference\": \"string\",\n    \"status\": \"processing\",\n    \"auth_model\": \"string\",\n    \"amount\": 6472.957215483602,\n    \"currency\": \"string\",\n    \"checkout_url\": \"http://XqpZHkINlDygfyILV.mkvMmrxfMCuaiD4GCUshlhk\",\n    \"redirect_url\": \"https://ltGOAcypRy.vzlytmuU5UQvLeG97-1RaRn5dbmOE6vKTUw\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0a656a7-9b37-4301-b775-eb308c5239d1",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    "initialize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"NGN\",\n  \"customer\": {\n    \"name\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"redirect_url\": \"<uri>\",\n  \"notification_url\": \"<uri>\",\n  \"narration\": \"<string>\",\n  \"metadata\": {\n    \"key_0\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3cfb91f8-ac82-4f1a-9666-95ef6797024c",
+          "name": "Charge a card",
+          "request": {
+            "name": "Charge a card",
+            "description": {
+              "content": "Charges a card. The card and payment details must be AES-256 encrypted with your encryption key and submitted as a single `charge_data` string. The response `status` (success, processing, or failed) and, when processing, the returned `auth_model` determine the next authorization step (PIN, OTP, AVS/address, or phone). Card payments require the feature to be enabled on your account and PCI DSS Level 1 certification.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "charges",
+                "card"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"charge_data\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8d2e6440-9feb-4a7d-80b6-a6580169f76a",
+              "name": "The card charge result.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    "card"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"charge_data\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"reference\": \"string\",\n    \"transaction_reference\": \"string\",\n    \"status\": \"processing\",\n    \"auth_model\": \"string\",\n    \"amount\": 6472.957215483602,\n    \"currency\": \"string\",\n    \"checkout_url\": \"http://XqpZHkINlDygfyILV.mkvMmrxfMCuaiD4GCUshlhk\",\n    \"redirect_url\": \"https://ltGOAcypRy.vzlytmuU5UQvLeG97-1RaRn5dbmOE6vKTUw\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22a3d030-677d-4d04-8b91-41be4d08070e",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    "card"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"charge_data\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "79065645-7219-4839-87fb-7f00742c8fa6",
+          "name": "Authorize a card charge",
+          "request": {
+            "name": "Authorize a card charge",
+            "description": {
+              "content": "Completes a processing card charge by supplying the authorization the card requires (PIN, OTP, AVS/address, or phone), together with the transaction reference. NOTE - the exact path of this authorization endpoint is inferred by convention; Kora's documentation links to a Postman entry rather than printing the literal path. Verify before use.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "charges",
+                "card",
+                "authorize"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction_reference\": \"<string>\",\n  \"authorization\": {\n    \"key_0\": true\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "20976fbe-4637-4929-918d-d10be2838e54",
+              "name": "The authorization result.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    "card",
+                    "authorize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transaction_reference\": \"<string>\",\n  \"authorization\": {\n    \"key_0\": 6114.673093800854\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"reference\": \"string\",\n    \"transaction_reference\": \"string\",\n    \"status\": \"processing\",\n    \"auth_model\": \"string\",\n    \"amount\": 6472.957215483602,\n    \"currency\": \"string\",\n    \"checkout_url\": \"http://XqpZHkINlDygfyILV.mkvMmrxfMCuaiD4GCUshlhk\",\n    \"redirect_url\": \"https://ltGOAcypRy.vzlytmuU5UQvLeG97-1RaRn5dbmOE6vKTUw\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ed6aca40-29a0-4a68-afa3-c05bf816f74a",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    "card",
+                    "authorize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transaction_reference\": \"<string>\",\n  \"authorization\": {\n    \"key_0\": 6114.673093800854\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3a0177d2-eb07-4305-a244-94e93e04c02b",
+          "name": "Charge a mobile money wallet",
+          "request": {
+            "name": "Charge a mobile money wallet",
+            "description": {
+              "content": "Charges a customer's mobile money wallet. Available in Kenya (KES), Ghana (GHS), Cameroon (XAF), Cote d'Ivoire (XOF), Egypt (EGP), and Tanzania (TZS). The response `auth_model` (OTP, STK_PROMPT, or REDIRECT) indicates the action required to complete the transaction.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "charges",
+                "mobile-money"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"<string>\",\n  \"mobile_money\": {\n    \"number\": \"<string>\"\n  },\n  \"customer\": {\n    \"name\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"notification_url\": \"<uri>\",\n  \"merchant_bears_cost\": false,\n  \"narration\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0cf4412a-4920-4d4b-9351-60546d0d42ed",
+              "name": "The mobile money charge result.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    "mobile-money"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"KES\",\n  \"mobile_money\": {\n    \"number\": \"254700000000\"\n  },\n  \"customer\": {\n    \"name\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"notification_url\": \"<uri>\",\n  \"merchant_bears_cost\": false,\n  \"narration\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"reference\": \"string\",\n    \"transaction_reference\": \"string\",\n    \"status\": \"processing\",\n    \"auth_model\": \"string\",\n    \"amount\": 6472.957215483602,\n    \"currency\": \"string\",\n    \"checkout_url\": \"http://XqpZHkINlDygfyILV.mkvMmrxfMCuaiD4GCUshlhk\",\n    \"redirect_url\": \"https://ltGOAcypRy.vzlytmuU5UQvLeG97-1RaRn5dbmOE6vKTUw\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "03be6583-ce02-4b6e-ba3d-a9d7d12644e4",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    "mobile-money"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"KES\",\n  \"mobile_money\": {\n    \"number\": \"254700000000\"\n  },\n  \"customer\": {\n    \"name\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"notification_url\": \"<uri>\",\n  \"merchant_bears_cost\": false,\n  \"narration\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9f07c3f8-3e5d-4c3f-801f-913c41d28537",
+          "name": "Authorize a mobile money charge",
+          "request": {
+            "name": "Authorize a mobile money charge",
+            "description": {
+              "content": "Authorizes a mobile money charge whose `auth_model` was OTP by submitting the OTP collected from the customer along with the transaction reference. The response indicates the next required action.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "charges",
+                "mobile-money",
+                "authorize"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction_reference\": \"<string>\",\n  \"authorization\": {\n    \"otp\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f94463d7-226a-4635-84e9-f26efa640a5a",
+              "name": "The authorization result.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    "mobile-money",
+                    "authorize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transaction_reference\": \"<string>\",\n  \"authorization\": {\n    \"otp\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"reference\": \"string\",\n    \"transaction_reference\": \"string\",\n    \"status\": \"processing\",\n    \"auth_model\": \"string\",\n    \"amount\": 6472.957215483602,\n    \"currency\": \"string\",\n    \"checkout_url\": \"http://XqpZHkINlDygfyILV.mkvMmrxfMCuaiD4GCUshlhk\",\n    \"redirect_url\": \"https://ltGOAcypRy.vzlytmuU5UQvLeG97-1RaRn5dbmOE6vKTUw\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1b22f36-a7b8-4113-adc2-3271531fb924",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    "mobile-money",
+                    "authorize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"transaction_reference\": \"<string>\",\n  \"authorization\": {\n    \"otp\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "14f8ae22-a0ee-4e7c-94e7-c5dc5eadd354",
+          "name": "Charge with Pay with Bank",
+          "request": {
+            "name": "Charge with Pay with Bank",
+            "description": {
+              "content": "Initiates a Pay with Bank charge and returns a redirect URL used to complete the payment. Supports ZAR Instant EFT and NGN direct-debit style flows (currently Opay and Palmpay for NGN).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "charge",
+                "pay-with-bank"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"<string>\",\n  \"customer\": {\n    \"name\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"redirect_url\": \"<uri>\",\n  \"notification_url\": \"<uri>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "574e40e6-8f32-43f6-9aa8-e549cd277f7d",
+              "name": "The pay-with-bank charge with a redirect URL.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charge",
+                    "pay-with-bank"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"ZAR\",\n  \"customer\": {\n    \"name\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"redirect_url\": \"<uri>\",\n  \"notification_url\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"reference\": \"string\",\n    \"transaction_reference\": \"string\",\n    \"status\": \"processing\",\n    \"auth_model\": \"string\",\n    \"amount\": 6472.957215483602,\n    \"currency\": \"string\",\n    \"checkout_url\": \"http://XqpZHkINlDygfyILV.mkvMmrxfMCuaiD4GCUshlhk\",\n    \"redirect_url\": \"https://ltGOAcypRy.vzlytmuU5UQvLeG97-1RaRn5dbmOE6vKTUw\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6cac073f-f8b0-46e9-8226-0bf88970622b",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charge",
+                    "pay-with-bank"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"ZAR\",\n  \"customer\": {\n    \"name\": \"<string>\",\n    \"email\": \"<email>\"\n  },\n  \"redirect_url\": \"<uri>\",\n  \"notification_url\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "937d35a6-af93-41bd-9b81-ff8d7cfbe1ad",
+          "name": "List Pay with Bank banks",
+          "request": {
+            "name": "List Pay with Bank banks",
+            "description": {
+              "content": "Retrieves the list of banks supported for Pay with Bank (Instant EFT).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "charge",
+                "pay-with-bank",
+                "banks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "08198088-7a23-4656-90eb-f2bc369aeb47",
+              "name": "A list of supported banks.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charge",
+                    "pay-with-bank",
+                    "banks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": [\n    {\n      \"name\": \"string\",\n      \"code\": \"string\",\n      \"key_0\": 1707.9886795994514\n    },\n    {\n      \"name\": \"string\",\n      \"code\": \"string\",\n      \"key_0\": 330.05927677863923\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4dc5d675-49e3-4bc3-92ec-a70553363c6f",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charge",
+                    "pay-with-bank",
+                    "banks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c4adba4d-015e-4583-83cc-00da95fa81af",
+          "name": "Verify / query a charge",
+          "request": {
+            "name": "Verify / query a charge",
+            "description": {
+              "content": "Retrieves the current status and details of a charge by its payment reference. Always verify a charge server-side before delivering value.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "charges",
+                ":reference"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "reference",
+                  "description": "(Required) The transaction / payment reference."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "df78d35e-8c17-43ca-9957-aadde56e0b76",
+              "name": "The charge status and details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    ":reference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "reference",
+                      "description": "(Required) The transaction / payment reference."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"reference\": \"string\",\n    \"transaction_reference\": \"string\",\n    \"status\": \"processing\",\n    \"auth_model\": \"string\",\n    \"amount\": 6472.957215483602,\n    \"currency\": \"string\",\n    \"checkout_url\": \"http://XqpZHkINlDygfyILV.mkvMmrxfMCuaiD4GCUshlhk\",\n    \"redirect_url\": \"https://ltGOAcypRy.vzlytmuU5UQvLeG97-1RaRn5dbmOE6vKTUw\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "de1e301e-1df2-42e9-8835-32ad3f887ced",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    ":reference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "reference",
+                      "description": "(Required) The transaction / payment reference."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cb4b8132-0381-4718-ab1b-84a051d6cad7",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "charges",
+                    ":reference"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "reference",
+                      "description": "(Required) The transaction / payment reference."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.korapay.com/merchant/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "db642aa0-4459-4607-90ec-f5d328d3b45f",
+    "name": "Kora (Korapay) Merchant Balances Charges API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Kora merchant REST API for pan-African payments. It supports pay-ins (card, bank transfer, mobile money, pay-with-bank), payouts (single, bulk, remittance), NGN and USD virtual bank accounts, balances, refunds, multi-currency conversion, and payout utilities (bank / mobile-money lookups and account resolution). All requests are authenticated with API keys - a public key for client-side charge initiation and a secret key (Bearer) for server-side and financial operations - and each account has separate Test and Live mode keys. Card charge payloads must be AES-256 encrypted with your encryption key. Webhook notifications carry an `x-korapay-signature` header that is an HMAC SHA-256 of the response `data` object signed with your secret key.\nThis document is a representative, grounded subset of the public Kora API. Request and response schemas are simplified; consult the Kora developer documentation for the authoritative field-level contract. Endpoints are confirmed against Kora's published documentation except where a description notes an inferred path.\n\nContact Support:\n Name: Kora Developer Support\n Email: support@korapay.com",
+      "type": "text/plain"
+    }
+  }
+}

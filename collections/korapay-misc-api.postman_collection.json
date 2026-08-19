@@ -1,0 +1,1035 @@
+{
+  "item": [
+    {
+      "id": "7fdcf6cd-88d8-454a-b150-c1f997f8157d",
+      "name": "Misc",
+      "description": {
+        "content": "Bank / mobile-money lookups, account resolution, and payout utilities.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b0dba50c-1eae-4d47-a5ff-5322a03de41b",
+          "name": "List banks",
+          "request": {
+            "name": "List banks",
+            "description": {
+              "content": "Lists supported banks and their bank codes for a country.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "misc",
+                "banks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "countryCode",
+                  "value": "<string>",
+                  "description": "(Required) ISO country code, e.g. NG, KE, ZA, GH."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d1be651a-c1a0-4912-8f56-fcce3690fbca",
+              "name": "A list of banks.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "banks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "countryCode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": false,\n  \"message\": \"string\",\n  \"data\": [\n    {\n      \"name\": \"string\",\n      \"code\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"code\": \"string\",\n      \"key_0\": \"string\",\n      \"key_1\": 9112.643166548985\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8f442d17-babd-4190-8bf1-c12a45d17f85",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "banks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "countryCode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": 7112\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cba9622d-36ac-4d7c-aba4-e872390c8b41",
+          "name": "Resolve a bank account",
+          "request": {
+            "name": "Resolve a bank account",
+            "description": {
+              "content": "Verifies a destination bank account and returns the resolved account holder name, given a bank code and account number.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "misc",
+                "banks",
+                "resolve"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bank\": \"<string>\",\n  \"account\": \"<string>\",\n  \"currency\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3a2851f9-9b74-4b02-813f-571e13428068",
+              "name": "The resolved account details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "banks",
+                    "resolve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"bank\": \"<string>\",\n  \"account\": \"<string>\",\n  \"currency\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": 2800,\n  \"key_1\": \"string\",\n  \"key_2\": 5088.107207508013\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d4a909cc-d112-4612-89b7-4163e1c97caf",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "banks",
+                    "resolve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"bank\": \"<string>\",\n  \"account\": \"<string>\",\n  \"currency\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": 7112\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eb94ae4a-ddc0-4d89-9bc4-50ecef7941f3",
+          "name": "List mobile money operators",
+          "request": {
+            "name": "List mobile money operators",
+            "description": {
+              "content": "Lists supported mobile money operators (and their slugs) for a country.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "misc",
+                "mobile-money"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "countryCode",
+                  "value": "<string>",
+                  "description": "(Required) ISO country code, e.g. KE, GH."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6a4f1787-ac10-424f-8c8e-cdde9341cbb9",
+              "name": "A list of mobile money operators.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "mobile-money"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "countryCode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": 2800,\n  \"key_1\": \"string\",\n  \"key_2\": 5088.107207508013\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "10c8599f-6f24-4206-b55f-e5f7407c20e6",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "mobile-money"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "countryCode",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": 7112\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "16a8d883-2b52-4b70-9770-cddd5fff136e",
+          "name": "Resolve a mobile money number",
+          "request": {
+            "name": "Resolve a mobile money number",
+            "description": {
+              "content": "Verifies a mobile money account and returns the resolved holder name.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "misc",
+                "mobile-money",
+                "resolve"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"key_0\": 2212,\n  \"key_1\": 1352.5486436344925\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "309404bc-30c9-41f4-aef0-16443d5b5699",
+              "name": "The resolved mobile money details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "mobile-money",
+                    "resolve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"key_0\": 2800,\n  \"key_1\": \"string\",\n  \"key_2\": 5088.107207508013\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": 2800,\n  \"key_1\": \"string\",\n  \"key_2\": 5088.107207508013\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9d55aadc-65b0-4dab-9dd8-a9e933a3fd74",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "mobile-money",
+                    "resolve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"key_0\": 2800,\n  \"key_1\": \"string\",\n  \"key_2\": 5088.107207508013\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": 7112\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f4470382-f834-4475-98ae-a798d438a347",
+          "name": "Get payout payment purposes by country",
+          "request": {
+            "name": "Get payout payment purposes by country",
+            "description": {
+              "content": "Returns the accepted payout payment-purpose values for a country. Some destination countries require a payment purpose on a payout request.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "misc",
+                "payout-payment-purpose-by-country-code",
+                ":countryCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "countryCode",
+                  "description": "(Required) ISO country code of the payout destination."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b111b81f-d663-4c2c-bedb-4903c32c44ab",
+              "name": "The accepted payment purposes.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "payout-payment-purpose-by-country-code",
+                    ":countryCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "countryCode",
+                      "description": "(Required) ISO country code of the payout destination."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": 2800,\n  \"key_1\": \"string\",\n  \"key_2\": 5088.107207508013\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "36950c57-4335-4233-bdd9-48425fc60b0e",
+              "name": "Unsupported country code.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "payout-payment-purpose-by-country-code",
+                    ":countryCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "countryCode",
+                      "description": "(Required) ISO country code of the payout destination."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c6ab0fc9-52fb-4874-acad-2c5073cbeb04",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "payout-payment-purpose-by-country-code",
+                    ":countryCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "countryCode",
+                      "description": "(Required) ISO country code of the payout destination."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": 7112\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b0635fd3-99ac-490a-ba4b-0781bd1d3506",
+          "name": "Get supported payout countries by currency",
+          "request": {
+            "name": "Get supported payout countries by currency",
+            "description": {
+              "content": "Returns the countries for which Kora has supported banks under a given currency, to confirm coverage before initiating a payout.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "misc",
+                "payout-countries-by-currency-code",
+                ":currencyCode"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "currencyCode",
+                  "description": "(Required) ISO currency code, e.g. USD, NGN."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "62b1f10e-7fce-44bd-92f3-7ac0e48ea433",
+              "name": "The supported countries.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "payout-countries-by-currency-code",
+                    ":currencyCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "currencyCode",
+                      "description": "(Required) ISO currency code, e.g. USD, NGN."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": 2800,\n  \"key_1\": \"string\",\n  \"key_2\": 5088.107207508013\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b4150ddc-e1dc-4075-92ab-f8c6c4d7a972",
+              "name": "Unsupported currency code.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "payout-countries-by-currency-code",
+                    ":currencyCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "currencyCode",
+                      "description": "(Required) ISO currency code, e.g. USD, NGN."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d3ba4fcc-80fe-4ae1-ab78-a4cfe6f6773c",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "misc",
+                    "payout-countries-by-currency-code",
+                    ":currencyCode"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "currencyCode",
+                      "description": "(Required) ISO currency code, e.g. USD, NGN."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": 7112\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.korapay.com/merchant/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ca4e47b1-17c8-4511-8629-bb5c891eb37c",
+    "name": "Kora (Korapay) Merchant Balances Misc API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Kora merchant REST API for pan-African payments. It supports pay-ins (card, bank transfer, mobile money, pay-with-bank), payouts (single, bulk, remittance), NGN and USD virtual bank accounts, balances, refunds, multi-currency conversion, and payout utilities (bank / mobile-money lookups and account resolution). All requests are authenticated with API keys - a public key for client-side charge initiation and a secret key (Bearer) for server-side and financial operations - and each account has separate Test and Live mode keys. Card charge payloads must be AES-256 encrypted with your encryption key. Webhook notifications carry an `x-korapay-signature` header that is an HMAC SHA-256 of the response `data` object signed with your secret key.\nThis document is a representative, grounded subset of the public Kora API. Request and response schemas are simplified; consult the Kora developer documentation for the authoritative field-level contract. Endpoints are confirmed against Kora's published documentation except where a description notes an inferred path.\n\nContact Support:\n Name: Kora Developer Support\n Email: support@korapay.com",
+      "type": "text/plain"
+    }
+  }
+}

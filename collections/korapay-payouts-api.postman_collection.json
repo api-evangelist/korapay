@@ -1,0 +1,810 @@
+{
+  "item": [
+    {
+      "id": "bb8355e7-428b-47cb-b43a-59ddb17ae609",
+      "name": "Payouts",
+      "description": {
+        "content": "Disbursements to bank accounts and mobile money wallets.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "67ae3d64-7247-425d-9d92-2e10ee7ec2cd",
+          "name": "Request a single payout",
+          "request": {
+            "name": "Request a single payout",
+            "description": {
+              "content": "Disburses funds from your Kora balance to a single bank account or mobile money wallet. Kora notifies your application via webhook when the payout completes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transactions",
+                "disburse"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"<string>\",\n  \"destination\": {\n    \"type\": \"<string>\",\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"bank_account\": {\n      \"bank\": \"<string>\",\n      \"account\": \"<string>\"\n    },\n    \"customer\": {\n      \"name\": \"<string>\",\n      \"email\": \"<email>\"\n    }\n  },\n  \"merchant_bears_cost\": false,\n  \"narration\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4c3e751a-21c9-41ea-9d11-2e6cc48f9cbb",
+              "name": "The initiated payout.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    "disburse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"NGN\",\n  \"destination\": {\n    \"type\": \"<string>\",\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"bank_account\": {\n      \"bank\": \"<string>\",\n      \"account\": \"<string>\"\n    },\n    \"customer\": {\n      \"name\": \"<string>\",\n      \"email\": \"<email>\"\n    }\n  },\n  \"merchant_bears_cost\": false,\n  \"narration\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bfe13a6f-8fb6-4e77-95b4-0a9fa82b5033",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    "disburse"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"NGN\",\n  \"destination\": {\n    \"type\": \"<string>\",\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"bank_account\": {\n      \"bank\": \"<string>\",\n      \"account\": \"<string>\"\n    },\n    \"customer\": {\n      \"name\": \"<string>\",\n      \"email\": \"<email>\"\n    }\n  },\n  \"merchant_bears_cost\": false,\n  \"narration\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "05ad211a-72f6-4711-8332-8186aa79a8b7",
+          "name": "Request a bulk payout",
+          "request": {
+            "name": "Request a bulk payout",
+            "description": {
+              "content": "Disburses to multiple destinations in a single batch (minimum 2 payouts). Supports NGN and ZAR bank accounts and KES and GHS mobile money. A webhook is sent after each individual payout in the batch completes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transactions",
+                "disburse",
+                "bulk"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"batch_reference\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"payouts\": [\n    {\n      \"reference\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"destination\": {\n        \"type\": \"<string>\",\n        \"amount\": \"<number>\",\n        \"currency\": \"<string>\",\n        \"bank_account\": {\n          \"bank\": \"<string>\",\n          \"account\": \"<string>\"\n        },\n        \"customer\": {\n          \"name\": \"<string>\",\n          \"email\": \"<email>\"\n        }\n      },\n      \"merchant_bears_cost\": false,\n      \"narration\": \"<string>\"\n    },\n    {\n      \"reference\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"currency\": \"<string>\",\n      \"destination\": {\n        \"type\": \"<string>\",\n        \"amount\": \"<number>\",\n        \"currency\": \"<string>\",\n        \"bank_account\": {\n          \"bank\": \"<string>\",\n          \"account\": \"<string>\"\n        },\n        \"customer\": {\n          \"name\": \"<string>\",\n          \"email\": \"<email>\"\n        }\n      },\n      \"merchant_bears_cost\": false,\n      \"narration\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"merchant_bears_cost\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "24dbd0d2-2a47-4038-a37b-66c8c18f42c3",
+              "name": "The initiated bulk payout batch.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    "disburse",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"batch_reference\": \"<string>\",\n  \"currency\": \"NGN\",\n  \"payouts\": [\n    {\n      \"reference\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"currency\": \"NGN\",\n      \"destination\": {\n        \"type\": \"<string>\",\n        \"amount\": \"<number>\",\n        \"currency\": \"<string>\",\n        \"bank_account\": {\n          \"bank\": \"<string>\",\n          \"account\": \"<string>\"\n        },\n        \"customer\": {\n          \"name\": \"<string>\",\n          \"email\": \"<email>\"\n        }\n      },\n      \"merchant_bears_cost\": false,\n      \"narration\": \"<string>\"\n    },\n    {\n      \"reference\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"currency\": \"NGN\",\n      \"destination\": {\n        \"type\": \"<string>\",\n        \"amount\": \"<number>\",\n        \"currency\": \"<string>\",\n        \"bank_account\": {\n          \"bank\": \"<string>\",\n          \"account\": \"<string>\"\n        },\n        \"customer\": {\n          \"name\": \"<string>\",\n          \"email\": \"<email>\"\n        },\n        \"key_0\": 8398,\n        \"key_1\": true,\n        \"key_2\": 2147.164480575282\n      },\n      \"merchant_bears_cost\": false,\n      \"narration\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"merchant_bears_cost\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a62b0fea-5d54-48e1-b506-fb544a3ad5b7",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    "disburse",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"batch_reference\": \"<string>\",\n  \"currency\": \"NGN\",\n  \"payouts\": [\n    {\n      \"reference\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"currency\": \"NGN\",\n      \"destination\": {\n        \"type\": \"<string>\",\n        \"amount\": \"<number>\",\n        \"currency\": \"<string>\",\n        \"bank_account\": {\n          \"bank\": \"<string>\",\n          \"account\": \"<string>\"\n        },\n        \"customer\": {\n          \"name\": \"<string>\",\n          \"email\": \"<email>\"\n        }\n      },\n      \"merchant_bears_cost\": false,\n      \"narration\": \"<string>\"\n    },\n    {\n      \"reference\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"currency\": \"NGN\",\n      \"destination\": {\n        \"type\": \"<string>\",\n        \"amount\": \"<number>\",\n        \"currency\": \"<string>\",\n        \"bank_account\": {\n          \"bank\": \"<string>\",\n          \"account\": \"<string>\"\n        },\n        \"customer\": {\n          \"name\": \"<string>\",\n          \"email\": \"<email>\"\n        },\n        \"key_0\": 8398,\n        \"key_1\": true,\n        \"key_2\": 2147.164480575282\n      },\n      \"merchant_bears_cost\": false,\n      \"narration\": \"<string>\"\n    }\n  ],\n  \"description\": \"<string>\",\n  \"merchant_bears_cost\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "53f2865d-d9ca-4475-a00a-7ae3e97e9c71",
+          "name": "Request a remittance payout",
+          "request": {
+            "name": "Request a remittance payout",
+            "description": {
+              "content": "Disburses a cross-border remittance payout to a supported destination.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transactions",
+                "disburse",
+                "remittance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"<string>\",\n  \"destination\": {\n    \"type\": \"<string>\",\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"bank_account\": {\n      \"bank\": \"<string>\",\n      \"account\": \"<string>\"\n    },\n    \"customer\": {\n      \"name\": \"<string>\",\n      \"email\": \"<email>\"\n    }\n  },\n  \"merchant_bears_cost\": false,\n  \"narration\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fcb66875-daae-49c8-a278-6c9f137d309b",
+              "name": "The initiated remittance payout.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    "disburse",
+                    "remittance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"NGN\",\n  \"destination\": {\n    \"type\": \"<string>\",\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"bank_account\": {\n      \"bank\": \"<string>\",\n      \"account\": \"<string>\"\n    },\n    \"customer\": {\n      \"name\": \"<string>\",\n      \"email\": \"<email>\"\n    }\n  },\n  \"merchant_bears_cost\": false,\n  \"narration\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73cb02a5-cfe9-4427-8911-54d5c331a8b9",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions",
+                    "disburse",
+                    "remittance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reference\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"NGN\",\n  \"destination\": {\n    \"type\": \"<string>\",\n    \"amount\": \"<number>\",\n    \"currency\": \"<string>\",\n    \"bank_account\": {\n      \"bank\": \"<string>\",\n      \"account\": \"<string>\"\n    },\n    \"customer\": {\n      \"name\": \"<string>\",\n      \"email\": \"<email>\"\n    }\n  },\n  \"merchant_bears_cost\": false,\n  \"narration\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "19d1b938-6474-4787-bdf9-73240f5c85ff",
+          "name": "Fetch payout history",
+          "request": {
+            "name": "Fetch payout history",
+            "description": {
+              "content": "Retrieves all payout transactions made from your Kora account. Accepts your secret key as the authorization header and supports date-range and pagination query parameters.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payouts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>",
+                  "description": "Start of the date range (ISO 8601)."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>",
+                  "description": "End of the date range (ISO 8601)."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Page number for pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of records per page."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c3988aa6-bc33-4a0a-8094-c12126c6110a",
+              "name": "A list of payout transactions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": [\n    {\n      \"key_0\": \"string\"\n    },\n    {\n      \"key_0\": 7663.86421798305\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e90ccd40-f8bb-4aff-ae92-f6a12d08aae5",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4c47385f-9a23-4530-9632-6c7f5a77258c",
+          "name": "Check payout availability",
+          "request": {
+            "name": "Check payout availability",
+            "description": {
+              "content": "Returns whether payouts are currently available for a destination.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "payouts",
+                "availability"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f8e29913-07d5-470c-96b6-12619ba5f3a7",
+              "name": "Payout availability status.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": \"string\",\n  \"key_1\": 8373\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "32ac63b4-b004-484c-a0f2-ad9552947527",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "payouts",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": true,\n  \"message\": \"string\",\n  \"data\": {\n    \"key_0\": false,\n    \"key_1\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.korapay.com/merchant/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "30eaeb22-2501-4fd7-962c-15fe8dac36bc",
+    "name": "Kora (Korapay) Merchant Balances Payouts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Kora merchant REST API for pan-African payments. It supports pay-ins (card, bank transfer, mobile money, pay-with-bank), payouts (single, bulk, remittance), NGN and USD virtual bank accounts, balances, refunds, multi-currency conversion, and payout utilities (bank / mobile-money lookups and account resolution). All requests are authenticated with API keys - a public key for client-side charge initiation and a secret key (Bearer) for server-side and financial operations - and each account has separate Test and Live mode keys. Card charge payloads must be AES-256 encrypted with your encryption key. Webhook notifications carry an `x-korapay-signature` header that is an HMAC SHA-256 of the response `data` object signed with your secret key.\nThis document is a representative, grounded subset of the public Kora API. Request and response schemas are simplified; consult the Kora developer documentation for the authoritative field-level contract. Endpoints are confirmed against Kora's published documentation except where a description notes an inferred path.\n\nContact Support:\n Name: Kora Developer Support\n Email: support@korapay.com",
+      "type": "text/plain"
+    }
+  }
+}

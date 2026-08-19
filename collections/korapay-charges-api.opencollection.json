@@ -1,0 +1,148 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Kora (Korapay) Merchant Balances Charges API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Charges",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initialize a charge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/charges/initialize",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Initializes a checkout charge and returns a hosted checkout URL / reference. Typically called with your public key from the client side."
+        },
+        {
+          "info": {
+            "name": "Charge a card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/charges/card",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Charges a card. The card and payment details must be AES-256 encrypted with your encryption key and submitted as a single `charge_data` string. The response `status` (success, processing, or failed) and, when processing, the returned `auth_model` determine the next authorization step (PIN, OTP, AVS/address, or phone). Card payments require the feature to be enabled on your account and PCI DSS Level 1 certification."
+        },
+        {
+          "info": {
+            "name": "Authorize a card charge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/charges/card/authorize",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Completes a processing card charge by supplying the authorization the card requires (PIN, OTP, AVS/address, or phone), together with the transaction reference. NOTE - the exact path of this authorization endpoint is inferred by convention; Kora's documentation links to a Postman entry rather than printing the literal path. Verify before use."
+        },
+        {
+          "info": {
+            "name": "Charge a mobile money wallet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/charges/mobile-money",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Charges a customer's mobile money wallet. Available in Kenya (KES), Ghana (GHS), Cameroon (XAF), Cote d'Ivoire (XOF), Egypt (EGP), and Tanzania (TZS). The response `auth_model` (OTP, STK_PROMPT, or REDIRECT) indicates the action required to complete the transaction."
+        },
+        {
+          "info": {
+            "name": "Authorize a mobile money charge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/charges/mobile-money/authorize",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Authorizes a mobile money charge whose `auth_model` was OTP by submitting the OTP collected from the customer along with the transaction reference. The response indicates the next required action."
+        },
+        {
+          "info": {
+            "name": "Charge with Pay with Bank",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/charge/pay-with-bank",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a Pay with Bank charge and returns a redirect URL used to complete the payment. Supports ZAR Instant EFT and NGN direct-debit style flows (currently Opay and Palmpay for NGN)."
+        },
+        {
+          "info": {
+            "name": "List Pay with Bank banks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/charge/pay-with-bank/banks"
+          },
+          "docs": "Retrieves the list of banks supported for Pay with Bank (Instant EFT)."
+        },
+        {
+          "info": {
+            "name": "Verify / query a charge",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/charges/:reference",
+            "params": [
+              {
+                "name": "reference",
+                "value": "",
+                "type": "path",
+                "description": "The transaction / payment reference."
+              }
+            ]
+          },
+          "docs": "Retrieves the current status and details of a charge by its payment reference. Always verify a charge server-side before delivering value."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

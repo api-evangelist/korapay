@@ -1,0 +1,101 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Kora (Korapay) Merchant Balances Virtual Bank Accounts API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Virtual Bank Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a virtual bank account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.korapay.com/merchant/api/v1/virtual-bank-account",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a dedicated NGN or USD virtual bank account (permanent or temporary) tied to a customer, with the KYC information required by the destination market (for example a BVN for NGN accounts)."
+        },
+        {
+          "info": {
+            "name": "Fetch virtual bank account transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/virtual-bank-account/transactions",
+            "params": [
+              {
+                "name": "account_number",
+                "value": "",
+                "type": "query",
+                "description": "The virtual bank account number."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start of the date range (ISO 8601)."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End of the date range (ISO 8601)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of records per page."
+              }
+            ]
+          },
+          "docs": "Retrieves the transactions that funded a virtual bank account."
+        },
+        {
+          "info": {
+            "name": "Retrieve a virtual bank account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.korapay.com/merchant/api/v1/virtual-bank-account/:accountReference",
+            "params": [
+              {
+                "name": "accountReference",
+                "value": "",
+                "type": "path",
+                "description": "The account_reference supplied when the account was created."
+              }
+            ]
+          },
+          "docs": "Retrieves a virtual bank account by its account reference."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
