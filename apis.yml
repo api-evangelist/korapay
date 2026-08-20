@@ -29,6 +29,17 @@ tags:
 - Payment Gateway
 - Africa
 - Nigeria
+- Collection
+- Payouts
+- Disbursements
+- Virtual Bank Account
+- Cards
+- Fintech
+tags_raw:
+- Payments
+- Payment Gateway
+- Africa
+- Nigeria
 - Collections
 - Payouts
 - Disbursements
@@ -152,7 +163,8 @@ apis:
   description: Bank / mobile-money lookups, account resolution, and payout utilities.
   humanURL: https://developers.korapay.com/docs/accept-payments
   baseURL: https://api.korapay.com/merchant/api/v1
-  tags:
+  tags: []
+  tags_raw:
   - Misc
   properties:
   - type: OpenAPI
