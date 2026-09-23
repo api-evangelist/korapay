@@ -1,13 +1,7 @@
 {
   "provider": "korapay",
   "sources": [
-    "korapay-balances-api-openapi.yml",
-    "korapay-charges-api-openapi.yml",
-    "korapay-currency-conversion-api-openapi.yml",
-    "korapay-misc-api-openapi.yml",
-    "korapay-payouts-api-openapi.yml",
-    "korapay-refunds-api-openapi.yml",
-    "korapay-virtual-bank-accounts-api-openapi.yml"
+    "_original/korapay-openapi.yml"
   ],
   "outputs": [
     "korapay-balances-api-openapi.yml",
@@ -21,6 +15,18 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "korapay-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "korapay-balances-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "korapay-charges-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "korapay-currency-conversion-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "korapay-misc-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "korapay-payouts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "korapay-refunds-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "korapay-virtual-bank-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
