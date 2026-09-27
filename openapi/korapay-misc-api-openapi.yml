@@ -164,16 +164,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        status:
-          type: boolean
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties: true
     BankList:
       type: object
       properties:
@@ -191,6 +181,16 @@ components:
               code:
                 type: string
             additionalProperties: true
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
     ResolveBankInput:
       type: object
       required:
