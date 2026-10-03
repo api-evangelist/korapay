@@ -164,23 +164,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    BankList:
-      type: object
-      properties:
-        status:
-          type: boolean
-        message:
-          type: string
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-              code:
-                type: string
-            additionalProperties: true
     ErrorResponse:
       type: object
       properties:
@@ -205,6 +188,23 @@ components:
           description: The account number to resolve.
         currency:
           type: string
+    BankList:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              code:
+                type: string
+            additionalProperties: true
   responses:
     Unauthorized:
       description: Missing or invalid API key.
