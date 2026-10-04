@@ -188,38 +188,14 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    MobileMoneyChargeInput:
+    EncryptedChargeInput:
       type: object
       required:
-      - reference
-      - amount
-      - currency
-      - mobile_money
-      - customer
+      - charge_data
       properties:
-        reference:
+        charge_data:
           type: string
-        amount:
-          type: number
-        currency:
-          type: string
-          example: KES
-        mobile_money:
-          type: object
-          properties:
-            number:
-              type: string
-              example: '254700000000'
-        notification_url:
-          type: string
-          format: uri
-        merchant_bears_cost:
-          type: boolean
-          default: false
-        narration:
-          type: string
-        customer:
-          $ref: '#/components/schemas/Customer'
+          description: The card charge payload (reference, card, amount, currency, customer, redirect_url, metadata) AES-256 encrypted with your encryption key.
     BankList:
       type: object
       properties:
@@ -237,59 +213,14 @@ components:
               code:
                 type: string
             additionalProperties: true
-    ErrorResponse:
+    Customer:
       type: object
       properties:
-        status:
-          type: boolean
-        message:
+        name:
           type: string
-        data:
-          type: object
-          additionalProperties: true
-    EncryptedChargeInput:
-      type: object
-      required:
-      - charge_data
-      properties:
-        charge_data:
+        email:
           type: string
-          description: The card charge payload (reference, card, amount, currency, customer, redirect_url, metadata) AES-256 encrypted with your encryption key.
-    CardAuthorizationInput:
-      type: object
-      required:
-      - transaction_reference
-      - authorization
-      properties:
-        transaction_reference:
-          type: string
-        authorization:
-          type: object
-          description: The authorization payload - pin, otp, avs/address, or phone.
-          additionalProperties: true
-    PayWithBankInput:
-      type: object
-      required:
-      - reference
-      - amount
-      - currency
-      - customer
-      properties:
-        reference:
-          type: string
-        amount:
-          type: number
-        currency:
-          type: string
-          example: ZAR
-        redirect_url:
-          type: string
-          format: uri
-        notification_url:
-          type: string
-          format: uri
-        customer:
-          $ref: '#/components/schemas/Customer'
+          format: email
     MobileMoneyAuthorizationInput:
       type: object
       required:
@@ -367,14 +298,83 @@ components:
               type: string
               format: uri
           additionalProperties: true
-    Customer:
+    MobileMoneyChargeInput:
+      type: object
+      required:
+      - reference
+      - amount
+      - currency
+      - mobile_money
+      - customer
+      properties:
+        reference:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+          example: KES
+        mobile_money:
+          type: object
+          properties:
+            number:
+              type: string
+              example: '254700000000'
+        notification_url:
+          type: string
+          format: uri
+        merchant_bears_cost:
+          type: boolean
+          default: false
+        narration:
+          type: string
+        customer:
+          $ref: '#/components/schemas/Customer'
+    CardAuthorizationInput:
+      type: object
+      required:
+      - transaction_reference
+      - authorization
+      properties:
+        transaction_reference:
+          type: string
+        authorization:
+          type: object
+          description: The authorization payload - pin, otp, avs/address, or phone.
+          additionalProperties: true
+    PayWithBankInput:
+      type: object
+      required:
+      - reference
+      - amount
+      - currency
+      - customer
+      properties:
+        reference:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+          example: ZAR
+        redirect_url:
+          type: string
+          format: uri
+        notification_url:
+          type: string
+          format: uri
+        customer:
+          $ref: '#/components/schemas/Customer'
+    ErrorResponse:
       type: object
       properties:
-        name:
+        status:
+          type: boolean
+        message:
           type: string
-        email:
-          type: string
-          format: email
+        data:
+          type: object
+          additionalProperties: true
   responses:
     Unauthorized:
       description: Missing or invalid API key.

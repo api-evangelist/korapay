@@ -92,15 +92,20 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   parameters:
-    StartDate:
-      name: start_date
-      in: query
-      required: false
-      description: Start of the date range (ISO 8601).
-      schema:
-        type: string
-        format: date
     Limit:
       name: limit
       in: query
@@ -123,17 +128,15 @@ components:
       schema:
         type: string
         format: date
+    StartDate:
+      name: start_date
+      in: query
+      required: false
+      description: Start of the date range (ISO 8601).
+      schema:
+        type: string
+        format: date
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        status:
-          type: boolean
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties: true
     VirtualBankAccount:
       type: object
       properties:
@@ -192,19 +195,16 @@ components:
             bvn:
               type: string
               description: Bank Verification Number (required for NGN accounts).
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
   securitySchemes:
     secretKeyAuth:
       type: http
