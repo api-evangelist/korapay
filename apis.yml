@@ -63,7 +63,7 @@ tags_raw:
 - Cards
 - Fintech
 created: '2026-07-12'
-modified: '2026-07-12'
+modified: '2026-10-06'
 specificationVersion: '0.23'
 apis:
 - aid: korapay:korapay-balances-api
@@ -320,6 +320,8 @@ apis:
   - type: Documentation
     url: https://developers.korapay.com/docs/payout-utilities
 common:
+- url: https://www.korahq.com/blog
+  type: Blog
 - type: AgenticAccess
   url: agentic-access/korapay-agentic-access.yml
 - type: DomainSecurity
