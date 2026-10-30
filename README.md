@@ -1,4 +1,4 @@
-# Kora (korapay)
+# Kora
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,197 +64,130 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Kora (formerly Korapay) is a pan-African payments infrastructure company that lets businesses collect payments, disburse payouts, run settlements, issue cards, verify identities, and check balances across African markets. The Kora merchant REST API (base `https://api.korapay.com/merchant/api/v1`) supports pay-ins via card, bank transfer, mobile money, and pay-with-bank; single, bulk, and remittance payouts; NGN and USD virtual bank accounts; balances; refunds; and multi-currency conversion.
+Kora (formerly Korapay) is a pan-African payments infrastructure company that lets businesses collect payments, disburse payouts, run settlements, issue cards, verify identities, and check balances across African markets. The Kora merchant REST API (base https://api.korapay.com/merchant/api/v1) supports pay-ins via card, bank transfer, mobile money, and pay-with-bank; single, bulk, and remittance payouts; NGN and USD virtual bank accounts; balances; refunds; and multi-currency conversion, with test and live modes authenticated by public and secret API keys and webhook events verified with an HMAC SHA-256 signature.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/korapay/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/korapay/refs/heads/main/apis.yml)
+**Areas:** Payments · Payment Gateway · Africa · Nigeria · Collection · Payouts · Disbursements · Virtual Bank Account · Cards · Fintech
 
-## Access Model (Honest Summary)
+## Kora on APIs.io
 
-- **REST + webhooks only.** The public surface is a request/response REST API over HTTPS at `https://api.korapay.com/merchant/api/v1`. Asynchronous transaction updates are delivered as **webhooks** (server-to-your-endpoint HTTP POST). There is **no documented public WebSocket (`wss://`) API**.
-- **Two key types, two modes.** Every account has a **public key** (`pk_...`, non-sensitive, client-side, can only initiate transactions) and a **secret key** (`sk_...`, server-side, required for any financial data or account operation). Keys differ between **Test** and **Live** modes. The secret key is passed as `Authorization: Bearer sk_...`.
-- **Card charges are encrypted.** Card payment payloads must be **AES-256 encrypted** with your account **encryption key** and sent as a single `charge_data` field. Card payments also require the feature to be enabled on your account and **PCI DSS Level 1** certification.
-- **Webhook authenticity.** Webhook requests carry an `x-korapay-signature` header, an **HMAC SHA-256** of only the `data` object of the payload, signed with your secret key. Verify it before delivering value.
-- Some products (card payments, mobile money) must be explicitly enabled on your account by Kora support before use.
+Everything profiled for Kora is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/korapay/](https://apis.io/providers/korapay/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (7)
 
-- Payments
-- Payment Gateway
-- Africa
-- Nigeria
-- Collections
-- Payouts
-- Disbursements
-- Virtual Bank Account
-- Cards
-- Fintech
+- [Kora Balances API](https://apis.io/apis/korapay/korapay-balances-api/) — Real-time available and pending balances per currency.
+- [Kora Charges API](https://apis.io/apis/korapay/korapay-charges-api/) — Pay-ins - card, bank transfer, mobile money, and pay-with-bank.
+- [Kora Currency Conversion API](https://apis.io/apis/korapay/korapay-currency-conversion-api/) — Exchange rates and multi-currency conversions.
+- [Kora Misc API](https://apis.io/apis/korapay/korapay-misc-api/) — Bank / mobile-money lookups, account resolution, and payout utilities.
+- [Kora Payouts API](https://apis.io/apis/korapay/korapay-payouts-api/) — Disbursements to bank accounts and mobile money wallets.
+- [Kora Refunds API](https://apis.io/apis/korapay/korapay-refunds-api/) — Refunds for completed pay-in transactions.
+- [Kora Virtual Bank Accounts API](https://apis.io/apis/korapay/korapay-virtual-bank-accounts-api/) — Dedicated NGN and USD virtual bank accounts.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-07-12
-- **Modified:** 2026-07-12
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### Agentic access (1)
 
-### Kora Charges API
+Which operations an agent can call, which act, and which need a human in the loop.
 
-Accept payments (pay-ins) from customers. Initialize a checkout charge, charge cards (encrypted, with OTP/PIN/AVS/phone authorization), charge and authorize mobile money wallets, run pay-with-bank (Instant EFT / direct debit) charges, and verify the final status of any charge by reference.
+- [Korapay Agentic Access](https://apis.io/agentic-access/korapay/korapay-agentic-access/)
 
-- **Human URL:** [https://developers.korapay.com/docs/accept-payments](https://developers.korapay.com/docs/accept-payments)
-- **Base URL:** `https://api.korapay.com/merchant/api/v1`
+#### Collections (8)
 
-#### Tags
+Postman and Open Collection request collections.
 
-- Collections
-- Charges
-- Cards
-- Bank Transfer
-- Mobile Money
+- [Kora (Korapay) Merchant API](https://apis.io/collections/korapay/open-korapay/)
+- [Kora (Korapay) Merchant Balances API](https://apis.io/collections/korapay/open-korapay-balances-api/)
+- [Kora (Korapay) Merchant Balances Charges API](https://apis.io/collections/korapay/open-korapay-charges-api/)
+- [Kora (Korapay) Merchant Balances Currency Conversion API](https://apis.io/collections/korapay/open-korapay-currency-conversion-api/)
+- [Kora (Korapay) Merchant Balances Misc API](https://apis.io/collections/korapay/open-korapay-misc-api/)
+- [Kora (Korapay) Merchant Balances Payouts API](https://apis.io/collections/korapay/open-korapay-payouts-api/)
+- [Kora (Korapay) Merchant Balances Refunds API](https://apis.io/collections/korapay/open-korapay-refunds-api/)
+- [Kora (Korapay) Merchant Balances Virtual Bank Accounts API](https://apis.io/collections/korapay/open-korapay-virtual-bank-accounts-api/)
 
-#### Properties
+#### Security (2)
 
-- [Documentation](https://developers.korapay.com/docs/accept-payments)
-- [API Reference](https://developers.korapay.com/docs/accepting-card-payments-with-apis)
-- [OpenAPI](openapi/korapay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/korapay.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/korapay.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Authentication, trust centre, and vulnerability disclosure.
 
-### Kora Payouts API
+- [Korapay Authentication](https://apis.io/security/korapay/korapay-authentication/)
+- [Korapay Domain Security](https://apis.io/security/korapay/korapay-domain-security/)
 
-Disburse funds from your Kora balance to bank accounts and mobile money wallets. Send single payouts, bulk payouts (batches of 2+), and cross-border remittance payouts, check payout availability, and fetch your payout history.
+#### Plans and pricing (1)
 
-- **Human URL:** [https://developers.korapay.com/docs/payout-via-api](https://developers.korapay.com/docs/payout-via-api)
-- **Base URL:** `https://api.korapay.com/merchant/api/v1`
+Published plans, tiers and prices.
 
-#### Tags
+- [Korapay Plans Pricing](https://apis.io/plans/korapay/korapay-plans-pricing/)
 
-- Payouts
-- Disbursements
-- Transfers
-- Bulk
+#### Rate limits (1)
 
-#### Properties
+Published request limits.
 
-- [Documentation](https://developers.korapay.com/docs/payout-via-api)
-- [API Reference](https://developers.korapay.com/docs/bulk-payouts-via-api)
-- [OpenAPI](openapi/korapay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/korapay.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/korapay.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Korapay Rate Limits](https://apis.io/rate-limits/korapay/korapay-rate-limits/)
 
-### Kora Virtual Bank Accounts API
+#### FinOps (1)
 
-Create and manage dedicated NGN and USD virtual bank accounts (permanent or temporary) tied to your customers, retrieve an account by its reference, and fetch the transactions that funded a virtual bank account.
+What the API costs to run, by operation.
 
-- **Human URL:** [https://developers.korapay.com/docs/virtual-bank-accounts](https://developers.korapay.com/docs/virtual-bank-accounts)
-- **Base URL:** `https://api.korapay.com/merchant/api/v1`
+- [Korapay Finops](https://apis.io/finops/korapay/korapay-finops/)
 
-#### Tags
+## Where to find this API
 
-- Virtual Bank Account
-- Collections
-- Nigeria
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-#### Properties
-
-- [Documentation](https://developers.korapay.com/docs/virtual-bank-accounts)
-- [API Reference](https://developers.korapay.com/docs/virtual-bank-accounts-ngn)
-- [OpenAPI](openapi/korapay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/korapay.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/korapay.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Kora Balances API
-
-Retrieve real-time available and pending balances across all supported currencies (NGN by default, plus USD, GHS, KES, XAF, XOF, ZAR for multi-currency accounts). Requires secret key authentication.
-
-- **Human URL:** [https://developers.korapay.com/docs/balance-api](https://developers.korapay.com/docs/balance-api)
-- **Base URL:** `https://api.korapay.com/merchant/api/v1`
-
-#### Tags
-
-- Balance
-- Reporting
-- Multi-Currency
-
-#### Properties
-
-- [Documentation](https://developers.korapay.com/docs/balance-api)
-- [OpenAPI](openapi/korapay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/korapay.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/korapay.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Kora Refunds API
-
-Initiate a full or partial refund for a completed pay-in transaction, retrieve the details of a single refund by reference, and list refunds within a given time period.
-
-- **Human URL:** [https://developers.korapay.com/docs/refunds-api](https://developers.korapay.com/docs/refunds-api)
-- **Base URL:** `https://api.korapay.com/merchant/api/v1`
-
-#### Tags
-
-- Refunds
-- Collections
-
-#### Properties
-
-- [Documentation](https://developers.korapay.com/docs/refunds-api)
-- [OpenAPI](openapi/korapay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/korapay.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/korapay.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Kora Currency Conversion API
-
-Get the latest exchange rate for a currency pair, initiate a currency conversion between your multi-currency balances, retrieve a conversion by reference, and list conversion history for a period.
-
-- **Human URL:** [https://developers.korapay.com/docs/currency-conversion-api](https://developers.korapay.com/docs/currency-conversion-api)
-- **Base URL:** `https://api.korapay.com/merchant/api/v1`
-
-#### Tags
-
-- Currency Conversion
-- FX
-- Multi-Currency
-
-#### Properties
-
-- [Documentation](https://developers.korapay.com/docs/currency-conversion-api)
-- [API Reference](https://developers.korapay.com/docs/exchange-rate-api)
-- [OpenAPI](openapi/korapay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/korapay.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/korapay.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Kora Misc Utilities API
-
-Payout support utilities - list banks and mobile money operators by country, resolve (verify) a destination bank account or mobile money number, and look up payout payment purposes and supported payout countries by currency before initiating a payout.
-
-- **Human URL:** [https://developers.korapay.com/docs/payout-utilities](https://developers.korapay.com/docs/payout-utilities)
-- **Base URL:** `https://api.korapay.com/merchant/api/v1`
-
-#### Tags
-
-- Banks
-- Account Resolution
-- Utilities
-
-#### Properties
-
-- [Documentation](https://developers.korapay.com/docs/payout-utilities)
-- [OpenAPI](openapi/korapay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/korapay.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/korapay.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [Domain Security](security/korapay-domain-security.yml)
-- [Authentication](authentication/korapay-authentication.yml)
-- [GitHub Organization](https://github.com/korapay)
-- [LinkedIn](https://www.linkedin.com/company/korapay)
 - [Website](https://www.korahq.com)
 - [Documentation](https://developers.korapay.com/docs/getting-started)
-- [Plans](plans/korapay-plans-pricing.yml)
-- [Rate Limits](rate-limits/korapay-rate-limits.yml)
-- [Fin Ops](finops/korapay-finops.yml)
+- [Blog](https://www.korahq.com/blog)
+- [GitHub](https://github.com/korapay)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 25.9** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 50.7 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 28.6 |
+| Access clarity | 7.9 |
+
+**Agent readiness 19.6** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 10.7** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/korapay/](https://apis.io/providers/korapay/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Kora: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/korapay/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
